@@ -2,15 +2,19 @@ package wiiu.mavity.random_game
 
 import com.badlogic.gdx.*
 
+import ktx.app.KtxApplicationAdapter
+import ktx.async.KtxAsync
 import ktx.log.*
 
-/** [com.badlogic.gdx.ApplicationListener] implementation shared by all platforms. */
-object RandomGame : ApplicationAdapter() {
+object RandomGame : KtxApplicationAdapter {
 
     override fun create() {
+        KtxAsync.initiate()
         Gdx.app.applicationLogger = Logging
-        info {
+        info { "abc" }
+        error(IllegalStateException("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")) {
             "Test"
         }
+        info { "def" }
     }
 }
