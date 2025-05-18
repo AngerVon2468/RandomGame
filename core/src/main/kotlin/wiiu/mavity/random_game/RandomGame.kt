@@ -16,6 +16,8 @@ object RandomGame : KtxApplicationAdapter {
 
     @JvmStatic var screen: Screen = emptyScreen()
 
+    private val centreCamera get() = screen is UIScreen
+
     override fun create() {
         KtxAsync.initiate()
         Gdx.app.applicationLogger = Logging
@@ -24,11 +26,11 @@ object RandomGame : KtxApplicationAdapter {
     }
 
     override fun resize(width: Int, height: Int) {
-        if (::viewport.isInitialized) viewport.update(width, height, screen is UIScreen)
+        if (::viewport.isInitialized) viewport.update(width, height, centreCamera)
     }
 
     override fun render() {
         clearScreen(red = 255f, green = 0f, blue = 0f)
-        viewport.apply()
+        viewport.apply(centreCamera)
     }
 }
