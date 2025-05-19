@@ -1,7 +1,6 @@
 package wiiu.mavity.random_game
 
-import wiiu.mavity.random_game.ui.UIScreen
-
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.utils.viewport.*
 import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.*
@@ -15,43 +14,48 @@ object RandomGame : KtxApplicationAdapter {
 
     @JvmStatic lateinit var viewport: Viewport private set
 
+    private lateinit var batch: Batch
+
     @JvmStatic var screen: Screen = emptyScreen()
 
-    private val batch: Batch = CpuSpriteBatch();
+    private lateinit var sprite: Sprite
 
-    private val centreCamera get() = screen is UIScreen
+    private val centreCamera get() =true// screen is UIScreen
 
     override fun create() {
         KtxAsync.initiate()
         Gdx.app.applicationLogger = Logging
         info { "Initializing!" }
-        viewport = FitViewport(16f, 9f)
+        viewport = FitViewport(512f, 288f)
+        batch = SpriteBatch()
+        sprite = Sprite(Texture(Gdx.files.internal("test.png")))
     }
 
-    override fun resize(width: Int, height: Int) {
-        if (::viewport.isInitialized) viewport.update(width, height, centreCamera)
-    }
+    override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport.update(width, height, centreCamera) else Unit
 
     override fun render() {
-        input()
-        logic()
-        draw()
+        val deltaTime = Gdx.graphics.deltaTime
+        input(deltaTime)
+        logic(deltaTime)
+        draw(deltaTime)
     }
 
-    private fun input() {
-
-    }
-
-    private fun logic() {
+    private fun input(deltaTime: Float) {
 
     }
 
-    private fun draw() {
-        clearScreen(red = 255f, green = 0f, blue = 0f)
+    private fun logic(deltaTime: Float) {
+
+    }
+
+    private fun draw(deltaTime: Float) {
+        clearScreen(red = 0f, green = 0f, blue = 0f)
         viewport.apply(centreCamera)
         batch.projectionMatrix = viewport.camera.combined
         batch.begin()
         // draw stuff here
+        screen.render(deltaTime)
+        sprite.draw(batch)
         batch.end()
     }
 }
