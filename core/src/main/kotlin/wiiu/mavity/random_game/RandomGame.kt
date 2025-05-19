@@ -1,6 +1,7 @@
 package wiiu.mavity.random_game
 
-import com.badlogic.gdx.graphics.Texture
+import wiiu.mavity.random_game.util.Sprite
+
 import com.badlogic.gdx.utils.viewport.*
 import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.*
@@ -28,7 +29,7 @@ object RandomGame : KtxApplicationAdapter {
         info { "Initializing!" }
         viewport = FitViewport(512f, 288f)
         batch = SpriteBatch()
-        sprite = Sprite(Texture(Gdx.files.internal("test.png")))
+        sprite = Sprite("test.png")
     }
 
     override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport.update(width, height, centreCamera) else Unit
