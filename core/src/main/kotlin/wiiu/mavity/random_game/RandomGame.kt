@@ -3,6 +3,7 @@ package wiiu.mavity.random_game
 import wiiu.mavity.random_game.ui.UIScreen
 
 import com.badlogic.gdx.utils.viewport.*
+import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.*
 
 import ktx.async.KtxAsync
@@ -15,6 +16,8 @@ object RandomGame : KtxApplicationAdapter {
     @JvmStatic lateinit var viewport: Viewport private set
 
     @JvmStatic var screen: Screen = emptyScreen()
+
+    private val batch: Batch = CpuSpriteBatch();
 
     private val centreCamera get() = screen is UIScreen
 
@@ -30,7 +33,25 @@ object RandomGame : KtxApplicationAdapter {
     }
 
     override fun render() {
+        input()
+        logic()
+        draw()
+    }
+
+    private fun input() {
+
+    }
+
+    private fun logic() {
+
+    }
+
+    private fun draw() {
         clearScreen(red = 255f, green = 0f, blue = 0f)
         viewport.apply(centreCamera)
+        batch.projectionMatrix = viewport.camera.combined
+        batch.begin()
+        // draw stuff here
+        batch.end()
     }
 }
