@@ -55,8 +55,8 @@ object RandomGame : KtxApplicationAdapter {
         batch.projectionMatrix = viewport.camera.combined
         batch.begin()
         // draw stuff here
-        screen.render(deltaTime)
         sprite.draw(batch)
+        screen.render(deltaTime)
         batch.end()
     }
 }
