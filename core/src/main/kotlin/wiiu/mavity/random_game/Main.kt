@@ -12,7 +12,7 @@ import ktx.log.*
 import ktx.app.*
 
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
-object RandomGame : KtxApplicationAdapter {
+object Main : KtxApplicationAdapter {
 
     @JvmStatic lateinit var viewport: Viewport private set
 

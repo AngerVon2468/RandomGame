@@ -16,9 +16,9 @@ object DefaultInputControls : KtxInputAdapter {
     }
 
     private fun fullscreenToggle() {
-        val fullscreen = isFullscreen
-        if (!fullscreen) Gdx.graphics.setFullscreenMode(Gdx.graphics.displayMode)
-        else Gdx.graphics.setWindowedMode(0, 0)
-        Gdx.graphics.setUndecorated(fullscreen)
+        val target = !isFullscreen
+        if (target) Gdx.graphics.setFullscreenMode(Gdx.graphics.displayMode)
+        else Gdx.graphics.setWindowedMode(1080, 720)
+        Gdx.graphics.setUndecorated(target)
     }
 }
