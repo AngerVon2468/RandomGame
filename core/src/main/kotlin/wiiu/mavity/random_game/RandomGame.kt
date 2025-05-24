@@ -1,6 +1,7 @@
 package wiiu.mavity.random_game
 
-import wiiu.mavity.random_game.util.Sprite
+import wiiu.mavity.random_game.input.DefaultInputControls
+import wiiu.mavity.random_game.util.*
 
 import com.badlogic.gdx.utils.viewport.*
 import com.badlogic.gdx.graphics.g2d.*
@@ -18,6 +19,12 @@ object RandomGame : KtxApplicationAdapter {
     private lateinit var batch: Batch
 
     @JvmStatic var screen: Screen = emptyScreen()
+        set(value) {
+            field.hide()
+            field = value
+            field.show()
+            field.resize(screenWidth, screenHeight)
+        }
 
     private lateinit var sprite: Sprite
 
@@ -26,6 +33,7 @@ object RandomGame : KtxApplicationAdapter {
     override fun create() {
         KtxAsync.initiate()
         Gdx.app.applicationLogger = Logging
+        Gdx.input.inputProcessor = DefaultInputControls
         info { "Initializing!" }
         viewport = FitViewport(512f, 288f)
         batch = SpriteBatch()
@@ -42,7 +50,6 @@ object RandomGame : KtxApplicationAdapter {
     }
 
     private fun input(deltaTime: Float) {
-
     }
 
     private fun logic(deltaTime: Float) {
@@ -54,7 +61,6 @@ object RandomGame : KtxApplicationAdapter {
         viewport.apply(centreCamera)
         batch.projectionMatrix = viewport.camera.combined
         batch.begin()
-        // draw stuff here
         sprite.draw(batch)
         screen.render(deltaTime)
         batch.end()
