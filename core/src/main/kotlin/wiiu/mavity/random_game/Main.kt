@@ -43,18 +43,15 @@ object Main : KtxApplicationAdapter {
     override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport.update(width, height, centreCamera) else Unit
 
     override fun render() {
-        val deltaTime = Gdx.graphics.deltaTime
+        val deltaTime = deltaTime
         input(deltaTime)
         logic(deltaTime)
         draw(deltaTime)
     }
 
-    private fun input(deltaTime: Float) {
-    }
+    private fun input(deltaTime: Float) = Unit
 
-    private fun logic(deltaTime: Float) {
-
-    }
+    private fun logic(deltaTime: Float) = Unit
 
     private fun draw(deltaTime: Float) {
         clearScreen(red = 0f, green = 0f, blue = 0f)

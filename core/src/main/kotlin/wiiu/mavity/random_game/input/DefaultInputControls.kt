@@ -1,6 +1,6 @@
 package wiiu.mavity.random_game.input
 
-import wiiu.mavity.random_game.util.isFullscreen
+import wiiu.mavity.random_game.util.*
 
 import com.badlogic.gdx.*
 
@@ -17,8 +17,8 @@ object DefaultInputControls : KtxInputAdapter {
 
     private fun fullscreenToggle() {
         val target = !isFullscreen
-        if (target) Gdx.graphics.setFullscreenMode(Gdx.graphics.displayMode)
-        else Gdx.graphics.setWindowedMode(1080, 720)
-        Gdx.graphics.setUndecorated(target)
+        if (target) graphics.setFullscreenMode(graphics.displayMode)
+        else graphics.setWindowedMode(1080, 720)
+        graphics.setUndecorated(target)
     }
 }
