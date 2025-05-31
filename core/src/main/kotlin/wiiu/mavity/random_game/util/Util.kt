@@ -1,5 +1,6 @@
 package wiiu.mavity.random_game.util
 
+import com.badlogic.gdx.utils.viewport.Viewport
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.*
@@ -23,3 +24,7 @@ val isFullscreen: Boolean
 
 val deltaTime: Float
     get() = graphics.deltaTime
+
+operator fun Viewport.invoke(centreCamera: Boolean = false) = this.apply(centreCamera)
+
+operator fun Viewport.invoke(width: Int, height: Int, centreCamera: Boolean = false) = this.update(width, height, centreCamera)

@@ -40,7 +40,7 @@ object Main : KtxApplicationAdapter {
         sprite = Sprite("test.png")
     }
 
-    override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport.update(width, height, centreCamera) else Unit
+    override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport(width, height, centreCamera) else Unit
 
     override fun render() {
         val deltaTime = deltaTime
@@ -55,11 +55,19 @@ object Main : KtxApplicationAdapter {
 
     private fun draw(deltaTime: Float) {
         clearScreen(red = 0f, green = 0f, blue = 0f)
-        viewport.apply(centreCamera)
+        viewport(centreCamera)
         batch.projectionMatrix = viewport.camera.combined
         batch.begin()
         sprite.draw(batch)
         screen.render(deltaTime)
         batch.end()
+    }
+
+    override fun dispose() {
+        screen.apply {
+            this.pause()
+            this.hide()
+            this.dispose()
+        }
     }
 }
