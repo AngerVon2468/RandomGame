@@ -17,6 +17,8 @@ import wiiu.mavity.random_game.world.read
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
 object Main : KtxApplicationAdapter {
 
+	@JvmStatic var paused: Boolean = false; private set
+
     @JvmStatic lateinit var viewport: Viewport private set
 
     private lateinit var batch: Batch
@@ -39,7 +41,7 @@ object Main : KtxApplicationAdapter {
         logger = FPSLogger()
         KtxAsync.initiate()
         Gdx.app.applicationLogger = Logging
-        Gdx.input.inputProcessor = DefaultInputControls
+		DefaultInputControls
         info { "Initializing!" }
         viewport = FitViewport(512f, 288f)
         batch = SpriteBatch()
@@ -50,6 +52,7 @@ object Main : KtxApplicationAdapter {
     override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport(width, height, centreCamera) else Unit
 
     override fun render() {
+		if (paused) return // stub because I want to see things happen when I push button
         logger.log()
         val deltaTime = deltaTime
         input(deltaTime)
@@ -70,6 +73,15 @@ object Main : KtxApplicationAdapter {
         screen.render(deltaTime)
         batch.end()
     }
+
+	override fun pause() {
+		info { "Game Paused" }
+		paused = true
+	}
+
+	override fun resume() {
+		paused = false
+	}
 
     override fun dispose() {
         screen.apply {

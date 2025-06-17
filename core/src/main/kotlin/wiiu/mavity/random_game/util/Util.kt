@@ -5,6 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.*
 
+import com.badlogic.gdx.controllers.Controller
+
+import org.jetbrains.annotations.Range
+
+import kotlin.time.Duration
+
 fun Sprite(path: String): Sprite = Sprite(Texture(path))
 
 val graphics: Graphics
@@ -25,6 +31,12 @@ val isFullscreen: Boolean
 val deltaTime: Float
     get() = graphics.deltaTime
 
+val displayMode: Graphics.DisplayMode
+	get() = graphics.displayMode
+
 operator fun Viewport.invoke(centreCamera: Boolean = false) = this.apply(centreCamera)
 
 operator fun Viewport.invoke(width: Int, height: Int, centreCamera: Boolean = false) = this.update(width, height, centreCamera)
+
+fun Controller.startVibration(duration: Duration, strength: @Range(from = 0L, to = 1L) Float) =
+	this.startVibration(duration.inWholeMilliseconds.toInt(), strength)
