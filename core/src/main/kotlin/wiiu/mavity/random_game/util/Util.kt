@@ -1,11 +1,10 @@
 package wiiu.mavity.random_game.util
 
 import com.badlogic.gdx.utils.viewport.Viewport
-import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.*
-
 import com.badlogic.gdx.controllers.Controller
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.graphics.*
+import com.badlogic.gdx.*
 
 import org.jetbrains.annotations.Range
 
@@ -37,6 +36,8 @@ val displayMode: Graphics.DisplayMode
 operator fun Viewport.invoke(centreCamera: Boolean = false) = this.apply(centreCamera)
 
 operator fun Viewport.invoke(width: Int, height: Int, centreCamera: Boolean = false) = this.update(width, height, centreCamera)
+
+operator fun FPSLogger.invoke() = this.log()
 
 fun Controller.startVibration(duration: Duration, strength: @Range(from = 0L, to = 1L) Float) =
 	this.startVibration(duration.inWholeMilliseconds.toInt(), strength)

@@ -35,10 +35,10 @@ object Main : KtxApplicationAdapter {
 
 	private val centreCamera get() =true// screen is UIScreen
 
-	private lateinit var logger: FPSLogger
+	private lateinit var fpsLogger: FPSLogger
 
 	override fun create() {
-		logger = FPSLogger()
+		fpsLogger = FPSLogger()
 		KtxAsync.initiate()
 		Gdx.app.applicationLogger = Logging
 		DefaultInputControls
@@ -53,7 +53,7 @@ object Main : KtxApplicationAdapter {
 
 	override fun render() {
 		if (paused) return // stub because I want to see things happen when I push button
-		logger.log()
+		fpsLogger()
 		val deltaTime = deltaTime
 		input(deltaTime)
 		logic(deltaTime)
