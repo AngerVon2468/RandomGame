@@ -26,17 +26,17 @@ object DefaultInputControls : KtxInputAdapter, ControllerAdapter() {
 		return true
 	}
 
-    override fun keyDown(keycode: Int): Boolean {
-        when (keycode) {
-            Input.Keys.F11 -> fullscreenToggle()
-        }
-        return true
-    }
+	override fun keyDown(keycode: Int): Boolean {
+		when (keycode) {
+			Input.Keys.F11 -> fullscreenToggle()
+		}
+		return true
+	}
 
-    private fun fullscreenToggle() {
-        val target = !isFullscreen
-        if (target) graphics.setFullscreenMode(displayMode)
-        else graphics.setWindowedMode(1080, 720)
-        graphics.setUndecorated(target)
-    }
+	private fun fullscreenToggle() {
+		val target = !isFullscreen
+		if (target) graphics.setFullscreenMode(displayMode)
+		else graphics.setWindowedMode(1080, 720)
+		graphics.setUndecorated(target)
+	}
 }

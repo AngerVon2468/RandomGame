@@ -14,22 +14,22 @@ import kotlin.time.Duration
 fun Sprite(path: String): Sprite = Sprite(Texture(path))
 
 val graphics: Graphics
-    get() = Gdx.graphics
+	get() = Gdx.graphics
 
 val screenWidth: Int
-    get() = graphics.width
+	get() = graphics.width
 
 val screenHeight: Int
-    get() = graphics.height
+	get() = graphics.height
 
 val fps: Int
-    get() = graphics.framesPerSecond
+	get() = graphics.framesPerSecond
 
 val isFullscreen: Boolean
-    get() = graphics.isFullscreen
+	get() = graphics.isFullscreen
 
 val deltaTime: Float
-    get() = graphics.deltaTime
+	get() = graphics.deltaTime
 
 val displayMode: Graphics.DisplayMode
 	get() = graphics.displayMode
