@@ -75,11 +75,12 @@ object Main : KtxApplicationAdapter {
 	}
 
 	override fun pause() {
-		info { "Game Paused" }
+		info { "Game Paused!" }
 		paused = true
 	}
 
 	override fun resume() {
+		info { "Game Resumed!" }
 		paused = false
 	}
 
@@ -89,5 +90,6 @@ object Main : KtxApplicationAdapter {
 			this.hide()
 			this.dispose()
 		}
+		batch.dispose()
 	}
 }
