@@ -14,6 +14,7 @@ import ktx.async.KtxAsync
 import ktx.log.*
 import ktx.app.*
 
+import wiiu.mavity.random_game.ui.screen.MenuScreen
 import wiiu.mavity.random_game.world.read
 
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
@@ -23,7 +24,7 @@ object Main : KtxApplicationAdapter {
 
 	@JvmStatic lateinit var viewport: Viewport private set
 
-	private lateinit var batch: Batch
+	lateinit var batch: Batch private set
 
 	@JvmStatic var screen: Screen = emptyScreen()
 		set(value) {
@@ -47,7 +48,7 @@ object Main : KtxApplicationAdapter {
 		Gdx.app.applicationLogger = Logging
 		DefaultInputControls
 		info { "Initializing!" }
-		viewport = FitViewport(512f, 288f)
+		viewport = FitViewport(256f, 144f)
 		batch = SpriteBatch()
 		sprite = Sprite("test.png")
 		font = FreeTypeFontGenerator(Gdx.files.internal("font${fs}JetBrainsMono-Light.ttf")).generateFont {
@@ -55,6 +56,7 @@ object Main : KtxApplicationAdapter {
 			this.hinting = FreeTypeFontGenerator.Hinting.None
 		}
 		read()
+		screen = MenuScreen()
 	}
 
 	override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport(width, height, centreCamera) else Unit
@@ -78,8 +80,6 @@ object Main : KtxApplicationAdapter {
 		batch.projectionMatrix = viewport.camera.combined
 		batch.begin()
 		sprite.draw(batch)
-		val layout = GlyphLayout(font, "This is a test.")
-		font.draw(batch, "This is a test.", (viewport.worldWidth - layout.width) / 2.0f, (viewport.worldHeight - layout.height) / 2.0f)
 		screen.render(deltaTime)
 		batch.end()
 	}

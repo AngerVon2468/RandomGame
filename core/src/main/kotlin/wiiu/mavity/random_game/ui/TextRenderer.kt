@@ -1,0 +1,82 @@
+package wiiu.mavity.random_game.ui
+
+import com.badlogic.gdx.graphics.g2d.*
+import com.badlogic.gdx.utils.Disposable
+
+import wiiu.mavity.random_game.Main
+
+typealias PositionModifier = TextRenderer.(Float) -> Float
+
+/**
+ * Simple abstraction to render text on-screen. This class is mutable & overridable for utility purposes, OVERRIDE AT OWN RISK!
+ *
+ * [TextRenderer] instances should be disposed when use has expired.
+ *
+ * @param x The horizontal position of the text.
+ * @param y The vertical position of the text.
+ * @param font The font to use for the text.
+ * @param text The text to render.
+ * @param xModifier A modifier to apply to the location of the text on the horizontal axis.
+ * @param yModifier A modifier to apply to the location of the text on the vertical axis.
+ *
+ * @property x The horizontal position of the text.
+ * @property y The vertical position of the text.
+ * @property font The font to use for the text.
+ * @property text The text to render.
+ * @property xModifier A modifier to apply to the location of the text on the horizontal axis.
+ * @property yModifier A modifier to apply to the location of the text on the vertical axis.
+ *
+ * @author EpicVon2468
+ */
+open class TextRenderer(
+	open var x: Float,
+	open var y: Float,
+	font: BitmapFont,
+	text: String,
+	open var xModifier: PositionModifier = { it },
+	open var yModifier: PositionModifier = { it }
+) : Disposable {
+
+	open var font: BitmapFont = font
+		set(value) {
+			field = value
+			this.layout.setText(field, this.text)
+		}
+
+	open var text: String = text
+		set(value) {
+			field = value
+			this.layout.setText(this.font, field)
+		}
+
+	open val layout = GlyphLayout(this.font, this.text)
+
+	open fun draw(batch: Batch) {
+		this.font.draw(batch, this.text, this.xModifier(this.x - this.layout.width), this.yModifier(this.y - this.layout.height))
+	}
+
+	override fun dispose() = font.dispose()
+}
+
+open class CentredTextRenderer(
+	font: BitmapFont,
+	text: String,
+	open var newXModifier: PositionModifier = { it },
+	open var newYModifier: PositionModifier = { it }
+) : TextRenderer(
+	0.0f,
+	0.0f,
+	font,
+	text
+) {
+
+	override var x: Float = 0.0f
+		get() = Main.viewport.worldWidth
+
+	override var y: Float = 0.0f
+		get() = Main.viewport.worldHeight
+
+	override var xModifier: PositionModifier = { this.newXModifier(it / 2.0f) }
+
+	override var yModifier: PositionModifier = { this.newYModifier(it / 2.0f) }
+}
