@@ -3,11 +3,13 @@ package wiiu.mavity.random_game
 import wiiu.mavity.random_game.input.DefaultInputControls
 import wiiu.mavity.random_game.util.*
 
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.FPSLogger
 import com.badlogic.gdx.utils.viewport.*
 import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.*
 
+import ktx.freetype.generateFont
 import ktx.async.KtxAsync
 import ktx.log.*
 import ktx.app.*
@@ -31,9 +33,11 @@ object Main : KtxApplicationAdapter {
 			field.resize(screenWidth, screenHeight)
 		}
 
+	@JvmStatic lateinit var font: BitmapFont
+
 	private lateinit var sprite: Sprite
 
-	private val centreCamera get() =true// screen is UIScreen
+	private val centreCamera get() = true
 
 	private lateinit var fpsLogger: FPSLogger
 
@@ -46,6 +50,10 @@ object Main : KtxApplicationAdapter {
 		viewport = FitViewport(512f, 288f)
 		batch = SpriteBatch()
 		sprite = Sprite("test.png")
+		font = FreeTypeFontGenerator(Gdx.files.internal("font${fs}JetBrainsMono-Light.ttf")).generateFont {
+			this.mono = true
+			this.hinting = FreeTypeFontGenerator.Hinting.None
+		}
 		read()
 	}
 
@@ -70,6 +78,7 @@ object Main : KtxApplicationAdapter {
 		batch.projectionMatrix = viewport.camera.combined
 		batch.begin()
 		sprite.draw(batch)
+		font.draw(batch, "This is a test.", 80.0f, 80.0f)
 		screen.render(deltaTime)
 		batch.end()
 	}
@@ -91,5 +100,7 @@ object Main : KtxApplicationAdapter {
 			this.dispose()
 		}
 		batch.dispose()
+		font.dispose()
+		sprite.texture.dispose()
 	}
 }

@@ -8,6 +8,8 @@ import com.badlogic.gdx.*
 
 import org.jetbrains.annotations.Range
 
+import java.nio.file.FileSystems
+
 import kotlin.time.Duration
 
 fun Sprite(path: String): Sprite = Sprite(Texture(path))
@@ -32,6 +34,9 @@ val deltaTime: Float
 
 val displayMode: Graphics.DisplayMode
 	get() = graphics.displayMode
+
+val fs: String
+	get() = FileSystems.getDefault().separator
 
 operator fun Viewport.invoke(centreCamera: Boolean = false) = this.apply(centreCamera)
 
