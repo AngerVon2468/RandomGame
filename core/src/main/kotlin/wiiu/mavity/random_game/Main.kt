@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.FPSLogger
 import com.badlogic.gdx.utils.viewport.*
 import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.*
+import com.badlogic.gdx.graphics.Texture
 
 import ktx.freetype.generateFont
 import ktx.async.KtxAsync
@@ -34,6 +35,8 @@ object Main : KtxApplicationAdapter {
 			field.resize(screenWidth, screenHeight)
 		}
 
+	private lateinit var fontGenerator: FreeTypeFontGenerator
+
 	@JvmStatic lateinit var font: BitmapFont
 
 	private lateinit var sprite: Sprite
@@ -51,7 +54,8 @@ object Main : KtxApplicationAdapter {
 		viewport = FitViewport(256f, 144f)
 		batch = SpriteBatch()
 		sprite = Sprite("test.png")
-		font = FreeTypeFontGenerator(Gdx.files.internal("font${fs}JetBrainsMono-Light.ttf")).generateFont {
+		fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("font${fs}JetBrainsMono-Light.ttf"))
+		font = fontGenerator.generateFont {
 			this.mono = true
 			this.hinting = FreeTypeFontGenerator.Hinting.None
 		}
@@ -102,6 +106,7 @@ object Main : KtxApplicationAdapter {
 		}
 		batch.dispose()
 		font.dispose()
+		fontGenerator.dispose()
 		sprite.texture.dispose()
 	}
 }
