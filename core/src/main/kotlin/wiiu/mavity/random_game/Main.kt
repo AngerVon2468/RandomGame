@@ -78,7 +78,8 @@ object Main : KtxApplicationAdapter {
 		batch.projectionMatrix = viewport.camera.combined
 		batch.begin()
 		sprite.draw(batch)
-		font.draw(batch, "This is a test.", 80.0f, 80.0f)
+		val layout = GlyphLayout(font, "This is a test.")
+		font.draw(batch, "This is a test.", (viewport.worldWidth - layout.width) / 2.0f, (viewport.worldHeight - layout.height) / 2.0f)
 		screen.render(deltaTime)
 		batch.end()
 	}
