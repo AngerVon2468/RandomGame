@@ -52,7 +52,7 @@ open class TextRenderer(
 	open val layout = GlyphLayout(this.font, this.text)
 
 	open fun draw(batch: Batch) {
-		this.font.draw(batch, this.text, this.xModifier(this.x - this.layout.width), this.yModifier(this.y - this.layout.height))
+		this.font.draw(batch, this.text, this.xModifier(this.x - this.layout.width), this.yModifier(this.y /*- this.layout.height*/))
 	}
 
 	override fun dispose() = font.dispose()
