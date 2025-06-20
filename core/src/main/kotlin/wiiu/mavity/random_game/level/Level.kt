@@ -1,4 +1,4 @@
-package wiiu.mavity.random_game.world
+package wiiu.mavity.random_game.level
 
 import com.google.gson.*
 import com.google.gson.stream.*
@@ -16,14 +16,14 @@ data class Position(val first: Int, val second: Int) {
 	}
 }
 
-data class World(val chunks: Map<Position, Chunk>)
+data class Level(val chunks: Map<Position, Chunk>)
 
 // tiles: Position : Tile ID
 data class Chunk(val position: Position, val tiles: Map<Position, String>)
 
-object WorldTypeAdapter : TypeAdapter<World>() {
+object LevelTypeAdapter : TypeAdapter<Level>() {
 
-	override fun write(out: JsonWriter, value: World) {
+	override fun write(out: JsonWriter, value: Level) {
 		out.beginObject()
 
 		for (entry in value.chunks.values) ChunkTypeAdapter.write(out, entry)
@@ -31,7 +31,7 @@ object WorldTypeAdapter : TypeAdapter<World>() {
 		out.endObject()
 	}
 
-	override fun read(`in`: JsonReader): World {
+	override fun read(`in`: JsonReader): Level {
 		val map: MutableMap<Position, Chunk> = mutableMapOf()
 
 		`in`.beginObject()
@@ -43,7 +43,7 @@ object WorldTypeAdapter : TypeAdapter<World>() {
 
 		`in`.endObject()
 
-		return World(map)
+		return Level(map)
 	}
 }
 
@@ -76,6 +76,6 @@ object ChunkTypeAdapter : TypeAdapter<Chunk>() {
 fun read() {
 	val gson = GsonBuilder()
 		.setPrettyPrinting()
-		.registerTypeAdapter(World::class.java, WorldTypeAdapter)
+		.registerTypeAdapter(Level::class.java, LevelTypeAdapter)
 		.registerTypeAdapter(Chunk::class.java, ChunkTypeAdapter)
 }

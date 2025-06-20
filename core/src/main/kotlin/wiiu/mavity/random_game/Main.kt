@@ -15,7 +15,7 @@ import ktx.log.*
 import ktx.app.*
 
 import wiiu.mavity.random_game.ui.screen.StartupScreen
-import wiiu.mavity.random_game.world.read
+import wiiu.mavity.random_game.level.read
 
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
 object Main : KtxApplicationAdapter {
