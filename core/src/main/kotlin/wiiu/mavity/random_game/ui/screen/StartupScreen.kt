@@ -7,9 +7,9 @@ import ktx.app.KtxScreen
 
 import wiiu.mavity.random_game.ui.UIScreen
 
-class MenuScreen : KtxScreen, UIScreen {
+class StartupScreen : KtxScreen, UIScreen {
 
-	val textRenderer = CentredTextRenderer(Main.font, "This is a test.")
+	val textRenderer = CentredTextRenderer(Main.font, "PLACEHOLDER")
 
 	override fun render(delta: Float) {
 		this.textRenderer.draw(Main.batch)

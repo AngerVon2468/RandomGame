@@ -1,7 +1,6 @@
 package wiiu.mavity.random_game.ui
 
 import com.badlogic.gdx.graphics.g2d.*
-import com.badlogic.gdx.utils.Disposable
 
 import wiiu.mavity.random_game.Main
 
@@ -9,8 +8,6 @@ typealias PositionModifier = TextRenderer.(Float) -> Float
 
 /**
  * Simple abstraction to render text on-screen. This class is mutable & overridable for utility purposes, OVERRIDE AT OWN RISK!
- *
- * [TextRenderer] instances should be disposed when use has expired.
  *
  * @param x The horizontal position of the text.
  * @param y The vertical position of the text.
@@ -35,7 +32,7 @@ open class TextRenderer(
 	text: String,
 	open var xModifier: PositionModifier = { it },
 	open var yModifier: PositionModifier = { it }
-) : Disposable {
+) {
 
 	open var font: BitmapFont = font
 		set(value) {
@@ -52,10 +49,8 @@ open class TextRenderer(
 	open val layout = GlyphLayout(this.font, this.text)
 
 	open fun draw(batch: Batch) {
-		this.font.draw(batch, this.text, this.xModifier(this.x - this.layout.width), this.yModifier(this.y /*- this.layout.height*/))
+		this.font.draw(batch, this.text, this.xModifier(this.x - this.layout.width), this.yModifier(this.y + this.layout.height))
 	}
-
-	override fun dispose() = font.dispose()
 }
 
 open class CentredTextRenderer(
@@ -79,4 +74,18 @@ open class CentredTextRenderer(
 	override var xModifier: PositionModifier = { this.newXModifier(it / 2.0f) }
 
 	override var yModifier: PositionModifier = { this.newYModifier(it / 2.0f) }
+}
+
+open class DeferredTextRenderer(
+	override var x: Float,
+	override var y: Float,
+	font: BitmapFont,
+	text: String,
+	override var xModifier: PositionModifier = { it },
+	override var yModifier: PositionModifier = { it }
+) : TextRenderer(x, y, font, text, xModifier, yModifier) {
+
+	init {
+		TODO()
+	}
 }

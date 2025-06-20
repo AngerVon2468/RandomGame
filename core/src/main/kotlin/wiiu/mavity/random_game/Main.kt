@@ -8,14 +8,13 @@ import com.badlogic.gdx.graphics.FPSLogger
 import com.badlogic.gdx.utils.viewport.*
 import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.*
-import com.badlogic.gdx.graphics.Texture
 
 import ktx.freetype.generateFont
 import ktx.async.KtxAsync
 import ktx.log.*
 import ktx.app.*
 
-import wiiu.mavity.random_game.ui.screen.MenuScreen
+import wiiu.mavity.random_game.ui.screen.StartupScreen
 import wiiu.mavity.random_game.world.read
 
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
@@ -39,10 +38,6 @@ object Main : KtxApplicationAdapter {
 
 	@JvmStatic lateinit var font: BitmapFont
 
-	private lateinit var sprite: Sprite
-
-	private val centreCamera get() = true
-
 	private lateinit var fpsLogger: FPSLogger
 
 	override fun create() {
@@ -53,17 +48,16 @@ object Main : KtxApplicationAdapter {
 		info { "Initializing!" }
 		viewport = FitViewport(256f, 144f)
 		batch = SpriteBatch()
-		sprite = Sprite("test.png")
 		fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("font${fs}JetBrainsMono-Light.ttf"))
 		font = fontGenerator.generateFont {
 			this.mono = true
 			this.hinting = FreeTypeFontGenerator.Hinting.None
 		}
 		read()
-		screen = MenuScreen()
+		screen = StartupScreen()
 	}
 
-	override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport(width, height, centreCamera) else Unit
+	override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport(width, height, true) else Unit
 
 	override fun render() {
 		if (paused) return // stub because I want to see things happen when I push button
@@ -79,11 +73,10 @@ object Main : KtxApplicationAdapter {
 	private fun logic(deltaTime: Float) = Unit
 
 	private fun draw(deltaTime: Float) {
-		clearScreen(red = 0f, green = 0f, blue = 0f)
-		viewport(centreCamera)
+		clearScreen(red = 0f, green = 255f, blue = 0f)
+		viewport(true)
 		batch.projectionMatrix = viewport.camera.combined
 		batch.begin()
-		sprite.draw(batch)
 		screen.render(deltaTime)
 		batch.end()
 	}
@@ -107,6 +100,5 @@ object Main : KtxApplicationAdapter {
 		batch.dispose()
 		font.dispose()
 		fontGenerator.dispose()
-		sprite.texture.dispose()
 	}
 }
