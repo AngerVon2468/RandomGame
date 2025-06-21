@@ -143,10 +143,7 @@ interface CrawlText : LoopableTextRendererAccess {
 	override val completed: Boolean
 		get() = this.index == this.textCopy.length
 
-	fun init() {
-		if (this.textCopy.isNotEmpty()) this.text = ""
-		else error { "Cannot use empty string!" }
-	}
+	fun init() = if (this.textCopy.isNotEmpty()) this.text = "" else error { "Cannot use empty string!" }
 
 	fun crawl() {
 		val nanoTime = nanoTime
@@ -155,6 +152,12 @@ interface CrawlText : LoopableTextRendererAccess {
 			this.startTime = nanoTime
 		}
 	}
+
+	fun autoReset(targetWait: Long) = this.loop(
+		condition = { this@CrawlText.completed },
+		targetWait = targetWait,
+		onComplete = { this@CrawlText.reset() }
+	)
 
 	fun reset() {
 		this.text = ""

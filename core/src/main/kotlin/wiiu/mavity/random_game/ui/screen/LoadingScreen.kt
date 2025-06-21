@@ -12,10 +12,6 @@ class LoadingScreen : KtxScreen, UIScreen {
 
 	override fun render(delta: Float) {
 		this.textRenderer.draw(Main.batch)
-		this.textRenderer.loop(
-			condition = { this.completed },
-			targetWait = 500_000_000,
-			onComplete = { this@LoadingScreen.textRenderer.reset() }
-		)
+		this.textRenderer.autoReset(500_000_000)
 	}
 }
