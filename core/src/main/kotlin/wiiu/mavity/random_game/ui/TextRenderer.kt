@@ -89,8 +89,23 @@ interface CrawlText {
 
 	var index: Int
 
+	var text: String
+
 	val completed: Boolean
 		get() = this.index == this.textCopy.length
+
+	fun init() {
+		if (this.textCopy.isNotEmpty()) this.text = ""
+		else error { "Cannot use empty string!" }
+	}
+
+	fun crawl() {
+		val nanoTime = System.nanoTime()
+		if (nanoTime - startTime > textCrawlSpeed) {
+			if (index < this.textCopy.length) this.text += this.textCopy[this.index++]
+			startTime = nanoTime
+		}
+	}
 }
 
 open class CrawlTextRenderer(
@@ -112,16 +127,11 @@ open class CrawlTextRenderer(
 		get() = super<CrawlText>.completed
 
 	init {
-		if (this.textCopy.isNotEmpty()) this.text = ""
-		else error { "Cannot use empty string!" }
+		this.init()
 	}
 
 	override fun draw(batch: Batch) {
-		val nanoTime = System.nanoTime()
-		if (nanoTime - startTime > textCrawlSpeed) {
-			if (index < this.textCopy.length) this.text += this.textCopy[this.index++]
-			startTime = nanoTime
-		}
+		this.crawl()
 		super.draw(batch)
 	}
 }
@@ -143,16 +153,11 @@ open class CentredCrawlTextRenderer(
 		get() = super<CrawlText>.completed
 
 	init {
-		if (this.textCopy.isNotEmpty()) this.text = ""
-		else error { "Cannot use empty string!" }
+		this.init()
 	}
 
 	override fun draw(batch: Batch) {
-		val nanoTime = System.nanoTime()
-		if (nanoTime - startTime > textCrawlSpeed) {
-			if (index < this.textCopy.length) this.text += this.textCopy[this.index++]
-			startTime = nanoTime
-		}
+		this.crawl()
 		super.draw(batch)
 	}
 }
