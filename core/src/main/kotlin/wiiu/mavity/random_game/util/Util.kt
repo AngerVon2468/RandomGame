@@ -38,6 +38,13 @@ val displayMode: Graphics.DisplayMode
 val fs: String
 	get() = FileSystems.getDefault().separator
 
+// 1_000_000_000 == 1.0 seconds in nanos
+// 500_000_000 == 0.5 seconds in nanos
+// 250_000_000 == 0.25 seconds in nanos
+// etc...
+val textCrawlSpeed: Long
+	get() = 125_000_000
+
 operator fun Viewport.invoke(centreCamera: Boolean = false) = this.apply(centreCamera)
 
 operator fun Viewport.invoke(width: Int, height: Int, centreCamera: Boolean = false) = this.update(width, height, centreCamera)

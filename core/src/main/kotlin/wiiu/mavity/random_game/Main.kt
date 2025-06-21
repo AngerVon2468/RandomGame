@@ -41,7 +41,7 @@ object Main : KtxApplicationAdapter {
 	private lateinit var fpsLogger: FPSLogger
 
 	override fun create() {
-		fpsLogger = FPSLogger()
+		fpsLogger = FPSLogger(75)
 		KtxAsync.initiate()
 		Gdx.app.applicationLogger = Logging
 		DefaultInputControls

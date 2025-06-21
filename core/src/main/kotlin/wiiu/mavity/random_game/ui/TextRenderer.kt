@@ -3,6 +3,7 @@ package wiiu.mavity.random_game.ui
 import com.badlogic.gdx.graphics.g2d.*
 
 import wiiu.mavity.random_game.Main
+import wiiu.mavity.random_game.util.textCrawlSpeed
 
 typealias PositionModifier = TextRenderer.(Float) -> Float
 
@@ -76,16 +77,60 @@ open class CentredTextRenderer(
 	override var yModifier: PositionModifier = { this.newYModifier(it / 2.0f) }
 }
 
-open class DeferredTextRenderer(
-	override var x: Float,
-	override var y: Float,
+open class CrawlTextRenderer(
+	x: Float,
+	y: Float,
 	font: BitmapFont,
 	text: String,
-	override var xModifier: PositionModifier = { it },
-	override var yModifier: PositionModifier = { it }
+	xModifier: PositionModifier = { it },
+	yModifier: PositionModifier = { it }
 ) : TextRenderer(x, y, font, text, xModifier, yModifier) {
 
+	var startTime: Long = System.nanoTime()
+
+	val textCopy: String = text
+
+	var index: Int = 0
+
 	init {
-		TODO()
+		if (this.textCopy.isNotEmpty()) this.text = ""
+		else error { "Cannot use empty string!" }
+	}
+
+	override fun draw(batch: Batch) {
+		val nanoTime = System.nanoTime()
+		if (nanoTime - startTime > textCrawlSpeed) {
+			if (index < this.textCopy.length) this.text += this.textCopy[this.index++]
+			startTime = nanoTime
+		}
+		super.draw(batch)
+	}
+}
+
+open class CentredCrawlTextRenderer(
+	font: BitmapFont,
+	text: String,
+	newXModifier: PositionModifier = { it },
+	newYModifier: PositionModifier = { it }
+) : CentredTextRenderer(font, text, newXModifier, newYModifier) {
+
+	var startTime: Long = System.nanoTime()
+
+	val textCopy: String = text
+
+	var index: Int = 0
+
+	init {
+		if (this.textCopy.isNotEmpty()) this.text = ""
+		else error { "Cannot use empty string!" }
+	}
+
+	override fun draw(batch: Batch) {
+		val nanoTime = System.nanoTime()
+		if (nanoTime - startTime > textCrawlSpeed) {
+			if (index < this.textCopy.length) this.text += this.textCopy[this.index++]
+			startTime = nanoTime
+		}
+		super.draw(batch)
 	}
 }
