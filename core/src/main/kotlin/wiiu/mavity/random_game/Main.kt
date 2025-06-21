@@ -17,6 +17,7 @@ import ktx.app.*
 import wiiu.mavity.random_game.ui.screen.StartupScreen
 import wiiu.mavity.random_game.level.read
 
+// TODO: Note to self: The priority order of rendering makes whatever is drawn last show up the highest.
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
 object Main : KtxApplicationAdapter {
 
