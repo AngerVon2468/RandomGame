@@ -9,9 +9,17 @@ typealias PositionModifier = TextRenderer.(Float) -> Float
 
 interface TextRendererAccess {
 
+	var x: Float
+
+	var y: Float
+
 	var font: BitmapFont
 
 	var text: String
+
+	var xModifier: PositionModifier
+
+	var yModifier: PositionModifier
 
 	val completed: Boolean
 
@@ -20,13 +28,17 @@ interface TextRendererAccess {
 	fun draw(batch: Batch)
 }
 
-interface Loopable : TextRendererAccess {
+interface LoopableTextRendererAccess : TextRendererAccess {
 
 	var loopConditionStart: Long
 
 	var loopConditionMet: Boolean
 
-	fun loop(condition: Loopable.() -> Boolean = { true }, targetWait: Long, onComplete: Loopable.() -> Unit) {
+	fun loop(
+		condition: LoopableTextRendererAccess.() -> Boolean = { true },
+		targetWait: Long,
+		onComplete: LoopableTextRendererAccess.() -> Unit
+	) {
 		if (!this.condition()) return
 		if (!this.loopConditionMet) {
 			this.loopConditionStart = nanoTime
@@ -64,13 +76,13 @@ interface Loopable : TextRendererAccess {
  * @author EpicVon2468
  */
 open class TextRenderer(
-	open var x: Float,
-	open var y: Float,
+	override var x: Float,
+	override var y: Float,
 	font: BitmapFont,
 	text: String,
-	open var xModifier: PositionModifier = { it },
-	open var yModifier: PositionModifier = { it }
-) : Loopable {
+	override var xModifier: PositionModifier = { it },
+	override var yModifier: PositionModifier = { it }
+) : LoopableTextRendererAccess {
 
 	override var loopConditionStart: Long = nanoTime
 
@@ -120,7 +132,7 @@ open class CentredTextRenderer(
 	override var yModifier: PositionModifier = { this.newYModifier(it / 2.0f) }
 }
 
-interface CrawlText : Loopable {
+interface CrawlText : LoopableTextRendererAccess {
 
 	var startTime: Long
 
