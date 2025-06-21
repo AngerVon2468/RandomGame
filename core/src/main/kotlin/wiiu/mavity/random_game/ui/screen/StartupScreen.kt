@@ -4,7 +4,6 @@ import wiiu.mavity.random_game.ui.*
 import wiiu.mavity.random_game.Main
 
 import ktx.app.KtxScreen
-import ktx.app.emptyScreen
 
 import wiiu.mavity.random_game.ui.UIScreen
 
@@ -27,7 +26,7 @@ class StartupScreen : KtxScreen, UIScreen {
 		if (nanoTime - startTime <= 2_500_000_000) return
 		when (this.textRenderer.text) {
 			"<TITLECARD>" -> {
-				Main.screen = emptyScreen()
+				Main.screen = LoadingScreen()
 				dispose()
 			}
 			else -> {

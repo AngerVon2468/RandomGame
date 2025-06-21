@@ -7,6 +7,7 @@ import wiiu.mavity.random_game.util.textCrawlSpeed
 
 typealias PositionModifier = TextRenderer.(Float) -> Float
 
+// TODO: Do periods go before the start of a parentheses, or inside at the end, or outside at the end?
 /**
  * Simple abstraction to render text on-screen. This class is mutable & overridable for utility purposes, OVERRIDE AT OWN RISK!
  *
@@ -21,6 +22,7 @@ typealias PositionModifier = TextRenderer.(Float) -> Float
  * @property y The vertical position of the text.
  * @property font The font to use for the text.
  * @property text The text to render.
+ * @property completed If the text has been fully rendered onto the screen (mostly relevant for [CrawlTextRenderer] & [CentredCrawlTextRenderer])
  * @property xModifier A modifier to apply to the location of the text on the horizontal axis.
  * @property yModifier A modifier to apply to the location of the text on the vertical axis.
  *
@@ -79,6 +81,18 @@ open class CentredTextRenderer(
 	override var yModifier: PositionModifier = { this.newYModifier(it / 2.0f) }
 }
 
+interface CrawlText {
+
+	var startTime: Long
+
+	var textCopy: String
+
+	var index: Int
+
+	val completed: Boolean
+		get() = this.index == this.textCopy.length
+}
+
 open class CrawlTextRenderer(
 	x: Float,
 	y: Float,
@@ -86,16 +100,16 @@ open class CrawlTextRenderer(
 	text: String,
 	xModifier: PositionModifier = { it },
 	yModifier: PositionModifier = { it }
-) : TextRenderer(x, y, font, text, xModifier, yModifier) {
+) : TextRenderer(x, y, font, text, xModifier, yModifier), CrawlText {
 
-	var startTime: Long = System.nanoTime()
+	override var startTime: Long = System.nanoTime()
 
-	val textCopy: String = text
+	override var textCopy: String = text
 
-	var index: Int = 0
+	override var index: Int = 0
 
 	override val completed: Boolean
-		get() = this.index == this.textCopy.length
+		get() = super<CrawlText>.completed
 
 	init {
 		if (this.textCopy.isNotEmpty()) this.text = ""
@@ -117,16 +131,16 @@ open class CentredCrawlTextRenderer(
 	text: String,
 	newXModifier: PositionModifier = { it },
 	newYModifier: PositionModifier = { it }
-) : CentredTextRenderer(font, text, newXModifier, newYModifier) {
+) : CentredTextRenderer(font, text, newXModifier, newYModifier), CrawlText {
 
-	var startTime: Long = System.nanoTime()
+	override var startTime: Long = System.nanoTime()
 
-	val textCopy: String = text
+	override var textCopy: String = text
 
-	var index: Int = 0
+	override var index: Int = 0
 
 	override val completed: Boolean
-		get() = this.index == this.textCopy.length
+		get() = super<CrawlText>.completed
 
 	init {
 		if (this.textCopy.isNotEmpty()) this.text = ""
