@@ -153,8 +153,8 @@ interface CrawlText : LoopableTextRendererAccess {
 		}
 	}
 
-	fun autoReset(targetWait: Long) = this.loop(
-		condition = { this@CrawlText.completed },
+	fun autoReset(targetWait: Long, extraCondition: CrawlText.() -> Boolean = { true }) = this.loop(
+		condition = { this@CrawlText.completed && this@CrawlText.extraCondition() },
 		targetWait = targetWait,
 		onComplete = { this@CrawlText.reset() }
 	)
