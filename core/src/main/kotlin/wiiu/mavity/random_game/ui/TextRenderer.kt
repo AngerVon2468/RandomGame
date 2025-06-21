@@ -7,6 +7,41 @@ import wiiu.mavity.random_game.util.*
 
 typealias PositionModifier = TextRenderer.(Float) -> Float
 
+interface TextRendererAccess {
+
+	var font: BitmapFont
+
+	var text: String
+
+	val completed: Boolean
+
+	val layout: GlyphLayout
+
+	fun draw(batch: Batch)
+}
+
+interface Loopable : TextRendererAccess {
+
+	var loopConditionStart: Long
+
+	var loopConditionMet: Boolean
+
+	fun loop(condition: Loopable.() -> Boolean = { true }, targetWait: Long, onComplete: Loopable.() -> Unit) {
+		if (!this.condition()) return
+		if (!this.loopConditionMet) {
+			this.loopConditionStart = nanoTime
+			this.loopConditionMet = true
+			return
+		}
+		val nanoTime = nanoTime
+		if (nanoTime - this.loopConditionStart > targetWait) {
+			this.onComplete()
+			this.loopConditionStart = nanoTime
+			this.loopConditionMet = false
+		}
+	}
+}
+
 // TODO: Do periods go before the start of a parentheses, or inside at the end, or outside at the end?
 /**
  * Simple abstraction to render text on-screen. This class is mutable & overridable for utility purposes, overriding and/or modifying variables while in use may have unexpected results.
@@ -35,25 +70,29 @@ open class TextRenderer(
 	text: String,
 	open var xModifier: PositionModifier = { it },
 	open var yModifier: PositionModifier = { it }
-) {
+) : Loopable {
 
-	open var font: BitmapFont = font
+	override var loopConditionStart: Long = nanoTime
+
+	override var loopConditionMet: Boolean = false
+
+	override var font: BitmapFont = font
 		set(value) {
 			field = value
 			this.layout.setText(field, this.text)
 		}
 
-	open var text: String = text
+	override var text: String = text
 		set(value) {
 			field = value
 			this.layout.setText(this.font, field)
 		}
 
-	open val completed: Boolean = true
+	override val completed: Boolean = true
 
-	open val layout = GlyphLayout(this.font, this.text)
+	override val layout = GlyphLayout(this.font, this.text)
 
-	open fun draw(batch: Batch) {
+	override fun draw(batch: Batch) {
 		this.font.draw(batch, this.text, this.xModifier(this.x - this.layout.width), this.yModifier(this.y + this.layout.height))
 	}
 }
@@ -81,7 +120,7 @@ open class CentredTextRenderer(
 	override var yModifier: PositionModifier = { this.newYModifier(it / 2.0f) }
 }
 
-interface CrawlText {
+interface CrawlText : Loopable {
 
 	var startTime: Long
 
@@ -89,12 +128,8 @@ interface CrawlText {
 
 	var index: Int
 
-	var text: String
-
-	val completed: Boolean
+	override val completed: Boolean
 		get() = this.index == this.textCopy.length
-
-	fun draw(batch: Batch)
 
 	fun init() {
 		if (this.textCopy.isNotEmpty()) this.text = ""
