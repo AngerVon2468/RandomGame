@@ -42,7 +42,7 @@ val fs: String
 // 500_000_000 == 0.5 seconds in nanos
 // 250_000_000 == 0.25 seconds in nanos
 // etc...
-val textCrawlSpeed: Long
+val textCrawlSpeed: Long // Time in nanos
 	get() = 125_000_000
 
 operator fun Viewport.invoke(centreCamera: Boolean = false) = this.apply(centreCamera)

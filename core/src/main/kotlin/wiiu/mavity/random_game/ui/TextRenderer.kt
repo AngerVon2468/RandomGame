@@ -47,6 +47,8 @@ open class TextRenderer(
 			this.layout.setText(this.font, field)
 		}
 
+	open val completed: Boolean = true
+
 	open val layout = GlyphLayout(this.font, this.text)
 
 	open fun draw(batch: Batch) {
@@ -92,6 +94,9 @@ open class CrawlTextRenderer(
 
 	var index: Int = 0
 
+	override val completed: Boolean
+		get() = this.index == this.textCopy.length
+
 	init {
 		if (this.textCopy.isNotEmpty()) this.text = ""
 		else error { "Cannot use empty string!" }
@@ -119,6 +124,9 @@ open class CentredCrawlTextRenderer(
 	val textCopy: String = text
 
 	var index: Int = 0
+
+	override val completed: Boolean
+		get() = this.index == this.textCopy.length
 
 	init {
 		if (this.textCopy.isNotEmpty()) this.text = ""

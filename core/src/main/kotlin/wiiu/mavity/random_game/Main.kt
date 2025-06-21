@@ -73,7 +73,7 @@ object Main : KtxApplicationAdapter {
 	private fun logic(deltaTime: Float) = Unit
 
 	private fun draw(deltaTime: Float) {
-		clearScreen(red = 0f, green = 255f, blue = 0f)
+		clearScreen(red = 0f, green = 0f, blue = 0f)
 		viewport(true)
 		batch.projectionMatrix = viewport.camera.combined
 		batch.begin()
