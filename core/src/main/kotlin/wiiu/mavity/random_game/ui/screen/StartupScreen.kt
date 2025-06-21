@@ -17,24 +17,23 @@ class StartupScreen : KtxScreen, UIScreen {
 
 	override fun render(delta: Float) {
 		this.textRenderer.draw(Main.batch)
-		if (this.textRenderer.completed) {
-			val nanoTime = System.nanoTime()
-			if (resetCounter) {
-				startTime = nanoTime
-				resetCounter = false
-				return
+		if (!this.textRenderer.completed)  return
+		val nanoTime = System.nanoTime()
+		if (resetCounter) {
+			startTime = nanoTime
+			resetCounter = false
+			return
+		}
+		if (nanoTime - startTime <= 2_500_000_000) return
+		when (this.textRenderer.text) {
+			"<TITLECARD>" -> {
+				Main.screen = emptyScreen()
+				dispose()
 			}
-			if (nanoTime - startTime <= 2_500_000_000) return
-			when (this.textRenderer.text) {
-				"<TITLECARD>" -> {
-					Main.screen = emptyScreen()
-					dispose()
-				}
-				else -> {
-					this.textRenderer = CentredCrawlTextRenderer(Main.font, "<TITLECARD>")
-					startTime = 0
-					resetCounter = true
-				}
+			else -> {
+				this.textRenderer = CentredCrawlTextRenderer(Main.font, "<TITLECARD>")
+				startTime = 0
+				resetCounter = true
 			}
 		}
 	}
