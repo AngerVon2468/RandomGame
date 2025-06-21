@@ -8,7 +8,10 @@ import wiiu.mavity.random_game.ui.UIScreen
 
 class LoadingScreen : KtxScreen, UIScreen {
 
-	val textRenderer: TextRenderer = CentredCrawlTextRenderer(Main.font, "Loading...")
+	val textRenderer: CrawlText = CentredCrawlTextRenderer(Main.font, "Loading...")
 
-
+	override fun render(delta: Float) {
+		this.textRenderer.draw(Main.batch)
+		if (this.textRenderer.completed) this.textRenderer.reset()
+	}
 }

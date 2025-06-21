@@ -9,7 +9,7 @@ typealias PositionModifier = TextRenderer.(Float) -> Float
 
 // TODO: Do periods go before the start of a parentheses, or inside at the end, or outside at the end?
 /**
- * Simple abstraction to render text on-screen. This class is mutable & overridable for utility purposes, OVERRIDE AT OWN RISK!
+ * Simple abstraction to render text on-screen. This class is mutable & overridable for utility purposes, overriding and/or modifying variables while in use may have unexpected results.
  *
  * @param x The horizontal position of the text.
  * @param y The vertical position of the text.
@@ -94,6 +94,8 @@ interface CrawlText {
 	val completed: Boolean
 		get() = this.index == this.textCopy.length
 
+	fun draw(batch: Batch)
+
 	fun init() {
 		if (this.textCopy.isNotEmpty()) this.text = ""
 		else error { "Cannot use empty string!" }
@@ -101,10 +103,22 @@ interface CrawlText {
 
 	fun crawl() {
 		val nanoTime = System.nanoTime()
-		if (nanoTime - startTime > textCrawlSpeed) {
+		if (nanoTime - this.startTime > textCrawlSpeed) {
 			if (index < this.textCopy.length) this.text += this.textCopy[this.index++]
-			startTime = nanoTime
+			this.startTime = nanoTime
 		}
+	}
+
+	fun reset() {
+		this.text = ""
+		this.index = 0
+		this.startTime = System.nanoTime()
+	}
+
+	fun newText(text: String) {
+		this.reset()
+		this.textCopy = text
+		this.init()
 	}
 }
 

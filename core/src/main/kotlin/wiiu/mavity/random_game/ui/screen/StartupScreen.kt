@@ -12,7 +12,7 @@ class StartupScreen : KtxScreen, UIScreen {
 	var startTime: Long = 0
 	var resetCounter: Boolean = true
 
-	var textRenderer: TextRenderer = CentredCrawlTextRenderer(Main.font, "Mavity Presents:")
+	val textRenderer: CrawlText = CentredCrawlTextRenderer(Main.font, "Mavity Presents:")
 
 	override fun render(delta: Float) {
 		this.textRenderer.draw(Main.batch)
@@ -30,7 +30,7 @@ class StartupScreen : KtxScreen, UIScreen {
 				dispose()
 			}
 			else -> {
-				this.textRenderer = CentredCrawlTextRenderer(Main.font, "<TITLECARD>")
+				this.textRenderer.newText("<TITLECARD>")
 				startTime = 0
 				resetCounter = true
 			}
