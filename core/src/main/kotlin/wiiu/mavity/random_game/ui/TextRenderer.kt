@@ -3,7 +3,7 @@ package wiiu.mavity.random_game.ui
 import com.badlogic.gdx.graphics.g2d.*
 
 import wiiu.mavity.random_game.Main
-import wiiu.mavity.random_game.util.textCrawlSpeed
+import wiiu.mavity.random_game.util.*
 
 typealias PositionModifier = TextRenderer.(Float) -> Float
 
@@ -102,7 +102,7 @@ interface CrawlText {
 	}
 
 	fun crawl() {
-		val nanoTime = System.nanoTime()
+		val nanoTime = nanoTime
 		if (nanoTime - this.startTime > textCrawlSpeed) {
 			if (index < this.textCopy.length) this.text += this.textCopy[this.index++]
 			this.startTime = nanoTime
@@ -112,7 +112,7 @@ interface CrawlText {
 	fun reset() {
 		this.text = ""
 		this.index = 0
-		this.startTime = System.nanoTime()
+		this.startTime = nanoTime
 	}
 
 	fun newText(text: String) {
@@ -131,7 +131,7 @@ open class CrawlTextRenderer(
 	yModifier: PositionModifier = { it }
 ) : TextRenderer(x, y, font, text, xModifier, yModifier), CrawlText {
 
-	override var startTime: Long = System.nanoTime()
+	override var startTime: Long = nanoTime
 
 	override var textCopy: String = text
 
@@ -157,7 +157,7 @@ open class CentredCrawlTextRenderer(
 	newYModifier: PositionModifier = { it }
 ) : CentredTextRenderer(font, text, newXModifier, newYModifier), CrawlText {
 
-	override var startTime: Long = System.nanoTime()
+	override var startTime: Long = nanoTime
 
 	override var textCopy: String = text
 

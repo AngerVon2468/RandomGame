@@ -6,6 +6,7 @@ import wiiu.mavity.random_game.Main
 import ktx.app.KtxScreen
 
 import wiiu.mavity.random_game.ui.UIScreen
+import wiiu.mavity.random_game.util.nanoTime
 
 class StartupScreen : KtxScreen, UIScreen {
 
@@ -17,7 +18,7 @@ class StartupScreen : KtxScreen, UIScreen {
 	override fun render(delta: Float) {
 		this.textRenderer.draw(Main.batch)
 		if (!this.textRenderer.completed)  return
-		val nanoTime = System.nanoTime()
+		val nanoTime = nanoTime
 		if (resetCounter) {
 			startTime = nanoTime
 			resetCounter = false

@@ -45,6 +45,9 @@ val fs: String
 val textCrawlSpeed: Long // Time in nanos
 	get() = 125_000_000
 
+val nanoTime: Long
+	get() = System.nanoTime()
+
 operator fun Viewport.invoke(centreCamera: Boolean = false) = this.apply(centreCamera)
 
 operator fun Viewport.invoke(width: Int, height: Int, centreCamera: Boolean = false) = this.update(width, height, centreCamera)
