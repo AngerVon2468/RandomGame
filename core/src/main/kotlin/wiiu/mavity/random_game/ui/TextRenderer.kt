@@ -54,7 +54,6 @@ interface LoopableTextRendererAccess : TextRendererAccess {
 	}
 }
 
-// TODO: Do periods go before the start of a parentheses, or inside at the end, or outside at the end?
 /**
  * Simple abstraction to render text on-screen. This class is mutable & overridable for utility purposes, overriding and/or modifying variables while in use may have unexpected results.
  *
@@ -69,7 +68,7 @@ interface LoopableTextRendererAccess : TextRendererAccess {
  * @property y The vertical position of the text.
  * @property font The font to use for the text.
  * @property text The text to render.
- * @property completed If the text has been fully rendered onto the screen (mostly relevant for [CrawlTextRenderer] & [CentredCrawlTextRenderer])
+ * @property completed If the text has been fully rendered onto the screen (mostly relevant for [CrawlTextRenderer] & [CentredCrawlTextRenderer]).
  * @property xModifier A modifier to apply to the location of the text on the horizontal axis.
  * @property yModifier A modifier to apply to the location of the text on the vertical axis.
  *
