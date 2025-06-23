@@ -47,10 +47,11 @@ object Main : KtxApplicationAdapter {
 		Gdx.app.applicationLogger = Logging
 		DefaultInputControls
 		info { "Initializing!" }
-		viewport = FitViewport(256f, 144f)
+		viewport = FitViewport(1024f, 576f)
 		batch = SpriteBatch()
 		fontGenerator = FreeTypeFontGenerator(Gdx.files.internal("font${fs}JetBrainsMono-Light.ttf"))
 		font = fontGenerator.generateFont {
+			this.size = 32
 			this.mono = true
 			this.hinting = FreeTypeFontGenerator.Hinting.None
 		}

@@ -8,7 +8,7 @@ import com.badlogic.gdx.*
 
 import org.jetbrains.annotations.Range
 
-import java.nio.file.FileSystems
+import java.io.File
 
 import kotlin.time.Duration
 
@@ -36,7 +36,7 @@ val displayMode: Graphics.DisplayMode
 	get() = graphics.displayMode
 
 val fs: String
-	get() = FileSystems.getDefault().separator
+	get() = File.separator
 
 // 1_000_000_000 == 1.0 seconds in nanos
 // 500_000_000 == 0.5 seconds in nanos
