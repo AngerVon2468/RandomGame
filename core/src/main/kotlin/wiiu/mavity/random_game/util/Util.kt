@@ -1,5 +1,7 @@
 package wiiu.mavity.random_game.util
 
+import com.artemis.*
+
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.graphics.g2d.Sprite
@@ -56,3 +58,7 @@ operator fun FPSLogger.invoke() = this.log()
 
 fun Controller.startVibration(duration: Duration, strength: @Range(from = 0L, to = 1L) Float) =
 	this.startVibration(duration.inWholeMilliseconds.toInt(), strength)
+
+typealias PhysicsWorld = com.badlogic.gdx.physics.box2d.World
+
+operator fun World.get(entityId: Int): Entity = this.getEntity(entityId)
