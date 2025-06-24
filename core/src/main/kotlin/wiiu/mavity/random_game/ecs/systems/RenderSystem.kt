@@ -12,6 +12,7 @@ import wiiu.mavity.random_game.util.get
 @All(Renderable::class)
 class RenderSystem : IteratingSystem() {
 
+	// Initialised by Reflection... I'm not going to question it...
 	lateinit var componentMapper: ComponentMapper<Renderable>
 
 	lateinit var batch: Batch

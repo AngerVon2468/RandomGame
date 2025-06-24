@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.Disposable
 // TODO: https://github.com/junkdog/artemis-odb/wiki/Making-a-Game
 object GameWorld : Disposable {
 
-	// Initialised by Reflection... I'm not going to question it...
 	private lateinit var configuration: WorldConfiguration
 
 	private lateinit var _world: World
