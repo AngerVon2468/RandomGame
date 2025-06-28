@@ -9,6 +9,7 @@ class XYComponentTests {
 	val component1: XYComponent = XYComponent(-3.7f, 14.5f)
 	val component2: XYComponent = XYComponent(9.4f, 2.3f)
 	val component3: XYComponent = component1 - 39.4f
+	val abc: Array<Array<String>> = arrayOf()
 
 	@Test
 	fun compareTo() {

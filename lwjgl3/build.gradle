@@ -16,6 +16,7 @@ apply plugin: 'io.github.fourlastor.construo'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 
 import io.github.fourlastor.construo.Target
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]

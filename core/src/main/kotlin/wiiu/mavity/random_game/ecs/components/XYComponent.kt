@@ -21,29 +21,29 @@ open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) : Component() {
 
 	operator fun component2(): Float = this.y
 
-	inline operator fun <reified T : XYComponent> plus(other: T): T = this.newInstance(this.x + other.x, this.y + other.y)
+	inline infix operator fun <reified T : XYComponent> plus(other: T): T = this.newInstance(this.x + other.x, this.y + other.y)
 
-	inline operator fun <reified T : XYComponent> plus(other: Vector2): T = this.newInstance(this.x + other.x, this.y + other.y)
+	inline infix operator fun <reified T : XYComponent> plus(other: Vector2): T = this.newInstance(this.x + other.x, this.y + other.y)
 
-	inline operator fun <reified T : XYComponent> plus(other: Number): T = this.newInstance(this.x + other.toFloat(), this.y + other.toFloat())
+	inline infix operator fun <reified T : XYComponent> plus(other: Number): T = this.newInstance(this.x + other.toFloat(), this.y + other.toFloat())
 
-	inline operator fun <reified T : XYComponent> minus(other: T): T = this.newInstance(this.x - other.x, this.y - other.y)
+	inline infix operator fun <reified T : XYComponent> minus(other: T): T = this.newInstance(this.x - other.x, this.y - other.y)
 
-	inline operator fun <reified T : XYComponent> minus(other: Vector2): T = this.newInstance(this.x - other.x, this.y - other.y)
+	inline infix operator fun <reified T : XYComponent> minus(other: Vector2): T = this.newInstance(this.x - other.x, this.y - other.y)
 
-	inline operator fun <reified T : XYComponent> minus(other: Number): T = this.newInstance(this.x - other.toFloat(), this.y - other.toFloat())
+	inline infix operator fun <reified T : XYComponent> minus(other: Number): T = this.newInstance(this.x - other.toFloat(), this.y - other.toFloat())
 
-	inline operator fun <reified T : XYComponent> times(other: T): T = this.newInstance(this.x * other.x, this.y * other.y)
+	inline infix operator fun <reified T : XYComponent> times(other: T): T = this.newInstance(this.x * other.x, this.y * other.y)
 
-	inline operator fun <reified T : XYComponent> times(other: Vector2): T = this.newInstance(this.x * other.x, this.y * other.y)
+	inline infix operator fun <reified T : XYComponent> times(other: Vector2): T = this.newInstance(this.x * other.x, this.y * other.y)
 
-	inline operator fun <reified T : XYComponent> times(other: Number): T = this.newInstance(this.x * other.toFloat(), this.y * other.toFloat())
+	inline infix operator fun <reified T : XYComponent> times(other: Number): T = this.newInstance(this.x * other.toFloat(), this.y * other.toFloat())
 
-	inline operator fun <reified T : XYComponent> div(other: T): T = this.newInstance(this.x / other.x, this.y / other.y)
+	inline infix operator fun <reified T : XYComponent> div(other: T): T = this.newInstance(this.x / other.x, this.y / other.y)
 
-	inline operator fun <reified T : XYComponent> div(other: Vector2): T = this.newInstance(this.x / other.x, this.y / other.y)
+	inline infix operator fun <reified T : XYComponent> div(other: Vector2): T = this.newInstance(this.x / other.x, this.y / other.y)
 
-	inline operator fun <reified T : XYComponent> div(other: Number): T = this.newInstance(this.x / other.toFloat(), this.y / other.toFloat())
+	inline infix operator fun <reified T : XYComponent> div(other: Number): T = this.newInstance(this.x / other.toFloat(), this.y / other.toFloat())
 
 	infix operator fun <T : XYComponent> plusAssign(other: T) {
 		this.x += other.x
@@ -153,8 +153,8 @@ open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) : Component() {
 	}
 
 	override fun hashCode(): Int {
-		var result = x.hashCode()
-		result = 31 * result + y.hashCode()
+		var result = this.x.hashCode()
+		result = 31 * result + this.y.hashCode()
 		return result
 	}
 
