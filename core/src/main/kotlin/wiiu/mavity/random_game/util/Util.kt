@@ -12,6 +12,9 @@ import org.jetbrains.annotations.Range
 
 import java.io.File
 
+import kotlinx.coroutines.*
+
+import kotlin.coroutines.*
 import kotlin.math.*
 import kotlin.time.Duration
 
@@ -67,3 +70,10 @@ operator fun World.get(entityId: Int): Entity = this.getEntity(entityId)
 fun squareRoot(number: Number): Float = sqrt(number.toFloat())
 
 fun Number.powerOf(number: Number): Float = this.toFloat().pow(number.toFloat())
+
+fun async(
+	context: CoroutineContext = EmptyCoroutineContext,
+	start: CoroutineStart = CoroutineStart.DEFAULT,
+	dispatcher: CoroutineDispatcher = Dispatchers.Default,
+	block: suspend CoroutineScope.() -> Unit
+): Job = CoroutineScope(dispatcher).launch(context, start, block)
