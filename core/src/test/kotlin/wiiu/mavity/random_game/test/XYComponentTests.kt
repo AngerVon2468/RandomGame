@@ -1,6 +1,6 @@
 package wiiu.mavity.random_game.test
 
-import wiiu.mavity.random_game.ecs.components.XYComponent
+import wiiu.mavity.random_game.util.XYComponent
 
 import kotlin.test.*
 

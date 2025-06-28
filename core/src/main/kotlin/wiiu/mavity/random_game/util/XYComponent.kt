@@ -1,10 +1,6 @@
-package wiiu.mavity.random_game.ecs.components
-
-import com.artemis.Component
+package wiiu.mavity.random_game.util
 
 import com.badlogic.gdx.math.Vector2
-
-import wiiu.mavity.random_game.util.*
 
 import kotlin.reflect.full.primaryConstructor
 
@@ -13,7 +9,7 @@ import kotlin.reflect.full.primaryConstructor
  *
  * Implements most of the basic arithmetic operations in the base class for utility purposes.
  */
-open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) : Component() {
+open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) {
 
 	val total: Float get() = this.x + this.y
 

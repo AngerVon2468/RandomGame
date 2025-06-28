@@ -15,7 +15,6 @@ import ktx.log.*
 import ktx.app.*
 
 import wiiu.mavity.random_game.ui.screen.StartupScreen
-import wiiu.mavity.random_game.ecs.*
 
 // TODO: Note to self: The priority order of rendering makes whatever is drawn last show up the highest.
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
@@ -56,9 +55,6 @@ object Main : KtxApplicationAdapter {
 			this.hinting = FreeTypeFontGenerator.Hinting.None
 		}
 		screen = StartupScreen()
-		GameWorld.init {
-			this.with(GamePlugin)
-		}
 	}
 
 	override fun resize(width: Int, height: Int) = if (::viewport.isInitialized) viewport(width, height, true) else Unit
@@ -67,7 +63,6 @@ object Main : KtxApplicationAdapter {
 		if (paused) return // stub because I want to see things happen when I push button
 		fpsLogger()
 		val deltaTime = deltaTime
-		GameWorld.tick(deltaTime)
 		input(deltaTime)
 		logic(deltaTime)
 		draw(deltaTime)
@@ -97,7 +92,6 @@ object Main : KtxApplicationAdapter {
 	}
 
 	override fun dispose() {
-		GameWorld.dispose()
 		screen.apply {
 			this.pause()
 			this.hide()
