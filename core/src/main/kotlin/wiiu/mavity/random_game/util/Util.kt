@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Range
 
 import java.io.File
 
+import kotlin.math.*
 import kotlin.time.Duration
 
 fun Sprite(path: String): Sprite = Sprite(Texture(path))
@@ -62,3 +63,7 @@ fun Controller.startVibration(duration: Duration, strength: @Range(from = 0L, to
 typealias PhysicsWorld = com.badlogic.gdx.physics.box2d.World
 
 operator fun World.get(entityId: Int): Entity = this.getEntity(entityId)
+
+fun squareRoot(number: Number): Float = sqrt(number.toFloat())
+
+fun Number.powerOf(number: Number): Float = this.toFloat().pow(number.toFloat())

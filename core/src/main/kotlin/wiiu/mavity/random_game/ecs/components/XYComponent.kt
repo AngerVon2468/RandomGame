@@ -4,6 +4,8 @@ import com.artemis.Component
 
 import com.badlogic.gdx.math.Vector2
 
+import wiiu.mavity.random_game.util.*
+
 import kotlin.reflect.full.primaryConstructor
 
 /**
@@ -12,6 +14,8 @@ import kotlin.reflect.full.primaryConstructor
  * Implements most of the basic arithmetic operations in the base class for utility purposes.
  */
 open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) : Component() {
+
+	val total: Float get() = this.x + this.y
 
 	operator fun component1(): Float = this.x
 
@@ -41,62 +45,62 @@ open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) : Component() {
 
 	inline operator fun <reified T : XYComponent> div(other: Number): T = this.newInstance(this.x / other.toFloat(), this.y / other.toFloat())
 
-	operator fun <T : XYComponent> plusAssign(other: T) {
+	infix operator fun <T : XYComponent> plusAssign(other: T) {
 		this.x += other.x
 		this.y += other.y
 	}
 
-	operator fun plusAssign(other: Vector2) {
+	infix operator fun plusAssign(other: Vector2) {
 		this.x += other.x
 		this.y += other.y
 	}
 
-	operator fun plusAssign(other: Number) {
+	infix operator fun plusAssign(other: Number) {
 		this.x += other.toFloat()
 		this.y += other.toFloat()
 	}
 
-	operator fun <T : XYComponent> minusAssign(other: T) {
+	infix operator fun <T : XYComponent> minusAssign(other: T) {
 		this.x -= other.x
 		this.y -= other.y
 	}
 
-	operator fun minusAssign(other: Vector2) {
+	infix operator fun minusAssign(other: Vector2) {
 		this.x -= other.x
 		this.y -= other.y
 	}
 
-	operator fun minusAssign(other: Number) {
+	infix operator fun minusAssign(other: Number) {
 		this.x -= other.toFloat()
 		this.y -= other.toFloat()
 	}
 
-	operator fun <T : XYComponent> timesAssign(other: T) {
+	infix operator fun <T : XYComponent> timesAssign(other: T) {
 		this.x *= other.x
 		this.y *= other.y
 	}
 
-	operator fun timesAssign(other: Vector2) {
+	infix operator fun timesAssign(other: Vector2) {
 		this.x *= other.x
 		this.y *= other.y
 	}
 
-	operator fun timesAssign(other: Number) {
+	infix operator fun timesAssign(other: Number) {
 		this.x *= other.toFloat()
 		this.y *= other.toFloat()
 	}
 
-	operator fun <T : XYComponent> divAssign(other: T) {
+	infix operator fun <T : XYComponent> divAssign(other: T) {
 		this.x /= other.x
 		this.y /= other.y
 	}
 
-	operator fun divAssign(other: Vector2) {
+	infix operator fun divAssign(other: Vector2) {
 		this.x /= other.x
 		this.y /= other.y
 	}
 
-	operator fun divAssign(other: Number) {
+	infix operator fun divAssign(other: Number) {
 		this.x /= other.toFloat()
 		this.y /= other.toFloat()
 	}
@@ -112,18 +116,23 @@ open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) : Component() {
 	/**
 	 * See [Comparable.compareTo].
 	 */
-	operator fun <T : XYComponent> compareTo(other: T): Int = this.compareTo0(other.total())
+	infix operator fun <T : XYComponent> compareTo(other: T): Int = this.compareTo0(other.total)
 
-	operator fun compareTo(other: Vector2): Int = this.compareTo0(other.x, other.y)
+	infix operator fun compareTo(other: Vector2): Int = this.compareTo0(other.x, other.y)
 
 	fun compareTo0(x: Number, y: Number): Int = this.compareTo0(x.toFloat() + y.toFloat())
 
 	fun compareTo0(otherTotal: Float): Int {
-		val thisTotal = this.total()
+		val thisTotal = this.total
 		return if (thisTotal < otherTotal) -1 else if (thisTotal > otherTotal) 1 else 0
 	}
 
-	fun total(): Float = this.x + this.y
+	// TODO: `distanceTo(other: Vector2)`
+	infix fun <T : XYComponent> distanceTo(other: T): Float {
+		val (x1, y1) = this
+		val (x2, y2) = other
+		return squareRoot((x2 - x1).powerOf(2) + (y2 - y1).powerOf(2))
+	}
 
 	inline fun <reified T : XYComponent> copy(): T = this.newInstance()
 
@@ -149,5 +158,5 @@ open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) : Component() {
 		return result
 	}
 
-	override fun toString(): String = "${this::class.simpleName}(x=$x, y=$y)"
+	override fun toString(): String = "${this::class.simpleName}(x=$x, y=$y, total=$total)"
 }

@@ -38,7 +38,7 @@ class RenderSystem : IteratingSystem() {
 		val entity = world[entityId]
 		when (mRenderable[entity].type) {
 			RenderType.Text -> TextRenderer.render(batch, entity)
-			RenderType.Spite -> TODO("Shush I'm getting around to it")
+			RenderType.Sprite -> TODO("Shush I'm getting around to it")
 			RenderType.Unknown -> TODO()
 		}
 	}
