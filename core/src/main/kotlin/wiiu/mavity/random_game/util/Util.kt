@@ -13,6 +13,7 @@ import java.io.File
 
 import java.time.format.*
 import java.time.temporal.ChronoField
+import java.util.concurrent.atomic.AtomicBoolean
 
 import kotlinx.coroutines.*
 
@@ -98,3 +99,7 @@ val THE_FORMATTER: DateTimeFormatter = DateTimeFormatterBuilder()
 	.appendLiteral(':')
 	.appendValue(ChronoField.SECOND_OF_MINUTE, 2)
 	.toFormatter()
+
+var AtomicBoolean.value: Boolean
+	get() = this.get()
+	set(value) = this.set(value)
