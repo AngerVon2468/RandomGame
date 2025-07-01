@@ -124,6 +124,7 @@ open class XYComponent(var x: Float = 0.0f, var y: Float = 0.0f) {
 	}
 
 	// TODO: `distanceTo(other: Vector2)`
+	// TODO: x1 & y1 should be the value further to the left, however the unit tests failed when this was tested, fix.
 	infix fun <T : XYComponent> distanceTo(other: T): Float {
 		val (x1, y1) = this
 		val (x2, y2) = other

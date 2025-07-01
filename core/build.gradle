@@ -1,6 +1,18 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
+String ktorServer(String target) {
+	return ktor("server-$target")
+}
+
+String ktorClient(String target) {
+	return ktor("client-$target")
+}
+
+String ktor(String target) {
+	return "io.ktor:ktor-$target:$ktor_version"
+}
+
 dependencies {
 	api "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
 	api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
@@ -9,7 +21,6 @@ dependencies {
 	api "com.badlogicgames.gdx:gdx:$gdxVersion"
 	api "io.github.libktx:ktx-actors:$ktxVersion"
 	api "io.github.libktx:ktx-app:$ktxVersion"
-	api "io.github.libktx:ktx-artemis:$ktxVersion"
 	api "io.github.libktx:ktx-assets-async:$ktxVersion"
 	api "io.github.libktx:ktx-assets:$ktxVersion"
 	api "io.github.libktx:ktx-async:$ktxVersion"
@@ -24,11 +35,19 @@ dependencies {
 	api "io.github.libktx:ktx-reflect:$ktxVersion"
 	api "io.github.libktx:ktx-scene2d:$ktxVersion"
 	api "io.github.libktx:ktx-style:$ktxVersion"
-	api "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
 	api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 	api "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 	api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 	api "com.google.code.gson:gson:$gsonVersion"
+	api "ch.qos.logback:logback-classic:1.5.18"
+	api ktorServer("core-jvm")
+	api ktorServer("netty")
+	// I don't need it extra secure YET
+	//api ktor("network-tls")
+	api ktor("network")
+	api ktorClient("core")
+	api ktorClient("cio")
+	api ktorClient("logging")
 
 	testApi "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
 

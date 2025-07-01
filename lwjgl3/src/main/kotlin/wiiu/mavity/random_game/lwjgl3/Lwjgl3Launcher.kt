@@ -4,12 +4,15 @@ package wiiu.mavity.random_game.lwjgl3
 
 import com.badlogic.gdx.backends.lwjgl3.*
 
-import wiiu.mavity.random_game.Main
+import wiiu.mavity.random_game.*
+import wiiu.mavity.random_game.util.OptionsParser
 
 /** Launches the desktop (LWJGL3) application. */
-fun main() {
+fun main(args: Array<String>) {
+	OptionsParser.init(args)
+	val dist: String = OptionsParser["dist"]
 	platformHelper()
-	Lwjgl3Application(Main, Lwjgl3ApplicationConfiguration().apply {
+	Lwjgl3Application(if (dist == "CLIENT") Client else Server, Lwjgl3ApplicationConfiguration().apply {
 		setTitle("RandomGame")
 		setWindowedMode(640, 480)
 		setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))

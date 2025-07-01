@@ -1,16 +1,18 @@
 package wiiu.mavity.random_game.util
 
-import com.artemis.*
-
 import com.badlogic.gdx.utils.viewport.Viewport
 import com.badlogic.gdx.controllers.Controller
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.*
+import com.badlogic.gdx.physics.box2d.World
 
 import org.jetbrains.annotations.Range
 
 import java.io.File
+
+import java.time.format.*
+import java.time.temporal.ChronoField
 
 import kotlinx.coroutines.*
 
@@ -63,9 +65,7 @@ operator fun FPSLogger.invoke() = this.log()
 fun Controller.startVibration(duration: Duration, strength: @Range(from = 0L, to = 1L) Float) =
 	this.startVibration(duration.inWholeMilliseconds.toInt(), strength)
 
-typealias PhysicsWorld = com.badlogic.gdx.physics.box2d.World
-
-operator fun World.get(entityId: Int): Entity = this.getEntity(entityId)
+typealias PhysicsWorld = World
 
 fun squareRoot(number: Number): Float = sqrt(number.toFloat())
 
@@ -77,3 +77,24 @@ fun async(
 	dispatcher: CoroutineDispatcher = Dispatchers.Default,
 	block: suspend CoroutineScope.() -> Unit
 ): Job = CoroutineScope(dispatcher).launch(context, start, block)
+
+fun asyncIO(
+	context: CoroutineContext = EmptyCoroutineContext,
+	start: CoroutineStart = CoroutineStart.DEFAULT,
+	block: suspend CoroutineScope.() -> Unit
+): Job = async(context, start, Dispatchers.IO, block)
+
+// ANSI Colour Codes
+const val RESET: String = "\u001B[0m"
+const val GREEN: String = "\u001B[32m"
+const val BLUE: String = "\u001B[34m"
+const val CYAN: String = "\u001B[36m"
+const val RED: String = "\u001B[31m"
+
+val THE_FORMATTER: DateTimeFormatter = DateTimeFormatterBuilder()
+	.appendValue(ChronoField.HOUR_OF_DAY, 2)
+	.appendLiteral(':')
+	.appendValue(ChronoField.MINUTE_OF_HOUR, 2)
+	.appendLiteral(':')
+	.appendValue(ChronoField.SECOND_OF_MINUTE, 2)
+	.toFormatter()

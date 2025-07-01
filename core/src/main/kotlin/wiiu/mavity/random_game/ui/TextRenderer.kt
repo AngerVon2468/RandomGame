@@ -2,7 +2,7 @@ package wiiu.mavity.random_game.ui
 
 import com.badlogic.gdx.graphics.g2d.*
 
-import wiiu.mavity.random_game.Main
+import wiiu.mavity.random_game.Client
 import wiiu.mavity.random_game.util.*
 
 typealias PositionModifier = TextRenderer.(Float) -> Float
@@ -121,10 +121,10 @@ open class CentredTextRenderer(
 ) {
 
 	override var x: Float = 0.0f
-		get() = Main.viewport.worldWidth
+		get() = Client.viewport.worldWidth
 
 	override var y: Float = 0.0f
-		get() = Main.viewport.worldHeight
+		get() = Client.viewport.worldHeight
 
 	override var xModifier: PositionModifier = { this.newXModifier(it / 2.0f) }
 

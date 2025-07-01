@@ -7,7 +7,7 @@ import com.badlogic.gdx.controllers.*
 
 import ktx.app.KtxInputAdapter
 
-import wiiu.mavity.random_game.Main
+import wiiu.mavity.random_game.Client
 
 import kotlin.time.Duration.Companion.seconds
 
@@ -20,7 +20,7 @@ object DefaultInputControls : KtxInputAdapter, ControllerAdapter() {
 
 	override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean {
 		if (buttonIndex == controller.mapping.buttonStart) {
-			if (Main.paused) Main.resume() else Main.pause()
+			if (Client.paused) Client.resume() else Client.pause()
 		}
 		controller.startVibration(0.5.seconds, 0.2f)
 		return true

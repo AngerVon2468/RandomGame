@@ -1,8 +1,5 @@
 package wiiu.mavity.random_game
 
-import wiiu.mavity.random_game.input.DefaultInputControls
-import wiiu.mavity.random_game.util.*
-
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.graphics.FPSLogger
 import com.badlogic.gdx.utils.viewport.*
@@ -15,10 +12,12 @@ import ktx.log.*
 import ktx.app.*
 
 import wiiu.mavity.random_game.ui.screen.StartupScreen
+import wiiu.mavity.random_game.input.DefaultInputControls
+import wiiu.mavity.random_game.util.*
 
 // TODO: Note to self: The priority order of rendering makes whatever is drawn last show up the highest.
 @Suppress("GDXKotlinStaticResource") // Because we're an object, not a class, it thinks we're doing something wrong
-object Main : KtxApplicationAdapter {
+object Client : KtxApplicationAdapter {
 
 	@JvmStatic var paused: Boolean = false; private set
 
@@ -44,6 +43,7 @@ object Main : KtxApplicationAdapter {
 		fpsLogger = FPSLogger(75)
 		KtxAsync.initiate()
 		Gdx.app.applicationLogger = Logging
+		@Suppress("UnusedExpression") // Calls the `init` statement.
 		DefaultInputControls
 		info { "Initializing!" }
 		viewport = FitViewport(1024f, 576f)
@@ -52,7 +52,6 @@ object Main : KtxApplicationAdapter {
 		font = fontGenerator.generateFont {
 			this.size = 32
 			this.mono = true
-			this.hinting = FreeTypeFontGenerator.Hinting.None
 		}
 		screen = StartupScreen()
 	}
