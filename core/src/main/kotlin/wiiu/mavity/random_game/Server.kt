@@ -24,8 +24,9 @@ object Server : KtxApplicationAdapter {
 	}
 
 	override fun render() {
+		this.connectionManager.preLoop()
 		// Perform logic before looping, then flush the data to send & update
-		this.connectionManager.loop()
+		this.connectionManager.postLoop()
 		println("Hi")
 	}
 
@@ -39,9 +40,7 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 	lateinit var serverSocket: ServerSocket private set
 
 	init {
-		asyncIO {
-			serverSocket = tcpSocket().bind(OptionsParser.ip, OptionsParser.port)
-		}
+		asyncIO { serverSocket = tcpSocket().bind(OptionsParser.ip, OptionsParser.port) }
 	}
 
 	override fun launchConnection() {
