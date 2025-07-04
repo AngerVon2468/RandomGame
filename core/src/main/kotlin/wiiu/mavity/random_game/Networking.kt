@@ -8,6 +8,10 @@ import io.ktor.utils.io.*
 
 import kotlinx.coroutines.*
 
+import kotlin.system.exitProcess
+
+import ktx.log.error
+
 import wiiu.mavity.random_game.util.*
 
 import java.util.concurrent.CopyOnWriteArrayList
@@ -54,19 +58,24 @@ abstract class SidedConnectionManager<T : SidedConnection> : Disposable {
 	 */
 	fun setupResponseListeners() {
 		println("Connection made! Setting up response listeners!")
-		this.connections.forEach {
-			asyncIO {
-				while (true) {
-					val line = it.connection.input.readUTF8Line()
-					if (line?.contains("(END)}") == true) {
-						_connections -= it
-						println("Dropping connection: ${it.connection} (END reached)")
-						it.postLoop0()
-						it.dispose()
-						break
+		asyncIO {
+			outer@while (true) {
+				for (it in this@SidedConnectionManager.connections) {
+					try {
+						val line = it.connection.input.readUTF8Line()
+						if (line?.contains("(END)}") == true) {
+							this@SidedConnectionManager._connections -= it
+							println("Dropping connection: ${it.connection} (END reached)")
+							it.postLoop0()
+							it.dispose()
+						}
+					} catch(e: Throwable) {
+						error { "Exception caught during response listener loop! Abandoning! $e" }
+						break@outer
 					}
 				}
 			}
+			exitProcess(0)
 		}
 	}
 

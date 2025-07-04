@@ -4,6 +4,8 @@ import io.ktor.network.sockets.*
 import io.ktor.server.application.Application
 import io.ktor.server.routing.*
 
+import kotlinx.coroutines.Job
+
 import ktx.app.KtxApplicationAdapter
 
 import wiiu.mavity.random_game.util.*
@@ -44,6 +46,11 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 
 	lateinit var serverSocket: ServerSocket private set
 
+	/**
+	 * Access to the current [Job] for connection. We don't want this to be active when we try to dispose of [serverSocket], so cancel during [dispose].
+	 */
+	private var connectionJob: Job? = null
+
 	init {
 		asyncIO { serverSocket = tcpSocket().bind(OptionsParser.ip, OptionsParser.port) }
 	}
@@ -51,7 +58,7 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 	override fun launchConnection() {
 		if (!this.awaitingConnection.value) return
 		this.awaitingConnection.value = false
-		asyncIO {
+		this.connectionJob = asyncIO {
 			println("Waiting for init.")
 			while (!this@ServerConnectionManager::serverSocket.isInitialized) ;
 			println("Init success!")
@@ -59,6 +66,11 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 			setupResponseListeners()
 			awaitingConnection.value = true
 		}
+	}
+
+	override fun dispose() {
+		this.connectionJob?.cancel()
+		super.dispose()
 	}
 }
 
