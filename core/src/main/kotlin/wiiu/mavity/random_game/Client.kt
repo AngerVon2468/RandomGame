@@ -17,6 +17,8 @@ import wiiu.mavity.random_game.ui.screen.StartupScreen
 import wiiu.mavity.random_game.input.DefaultInputControls
 import wiiu.mavity.random_game.util.*
 
+import kotlinx.coroutines.runBlocking
+
 import kotlin.collections.plusAssign
 
 // TODO: Note to self: The priority order of rendering makes whatever is drawn last show up the highest.
@@ -126,6 +128,12 @@ class ClientConnectionManager : SidedConnectionManager<ClientConnection>() {
 			_connections += ClientConnection(tcpSocket().connect(OptionsParser.ip, OptionsParser.port).connection())
 			setupResponseListeners()
 		}
+	}
+
+	override fun dispose() = runBlocking {
+		theConnection += "(END)}"
+		theConnection.postLoop0()
+		super.dispose()
 	}
 }
 

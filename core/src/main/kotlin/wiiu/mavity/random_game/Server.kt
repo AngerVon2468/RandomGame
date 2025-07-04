@@ -2,6 +2,7 @@ package wiiu.mavity.random_game
 
 import io.ktor.network.sockets.*
 import io.ktor.server.application.Application
+import io.ktor.server.engine.internal.ClosedChannelException
 import io.ktor.server.routing.*
 
 import ktx.app.KtxApplicationAdapter
@@ -63,7 +64,9 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 
 	override fun dispose() {
 		super.dispose()
-		this.serverSocket.dispose()
+		try {
+			this.serverSocket.dispose()
+		} catch (ignored: ClosedChannelException) {} // No idea how to stop this one.
 	}
 }
 

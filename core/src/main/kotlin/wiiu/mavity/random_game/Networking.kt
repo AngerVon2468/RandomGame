@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 
 import wiiu.mavity.random_game.util.*
 
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 
 @Suppress("PropertyName") // You can't tell me how to name my own properties!
@@ -19,7 +20,7 @@ abstract class SidedConnectionManager<T : SidedConnection> : Disposable {
 
 	val selectorManager = SelectorManager(Dispatchers.IO)
 
-	protected val _connections: MutableList<T> = mutableListOf()
+	protected val _connections: MutableList<T> = CopyOnWriteArrayList()
 	val connections: List<T> get() = this._connections
 
 	val awaitingConnection = AtomicBoolean(true)
@@ -66,14 +67,25 @@ abstract class SidedConnectionManager<T : SidedConnection> : Disposable {
 
 abstract class SidedConnection(val connection: Connection) : Disposable {
 
+	/**
+	 * Cached content to push to the connection. It MUST be sent via a cached string to avoid race conditions.
+	 */
+	private var cache: String = ""
+
 	open fun postLoop() {
-		asyncIO {
-			if (!connection.output.isClosedForWrite) connection.output.flush()
+		asyncIO { this@SidedConnection.postLoop0() }
+	}
+
+	open suspend fun postLoop0() {
+		if (!this.connection.output.isClosedForWrite) {
+			this.connection.output.writeStringUtf8(this.cache)
+			this.cache = ""
+			this.connection.output.flush()
 		}
 	}
 
 	open operator fun plusAssign(data: String) {
-		asyncIO { connection.output.writeStringUtf8(data) }
+		this.cache += data
 	}
 
 	override fun dispose() = this.connection.socket.dispose()
