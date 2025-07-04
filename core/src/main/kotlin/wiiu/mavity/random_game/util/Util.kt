@@ -54,6 +54,9 @@ val fs: String
 val textCrawlSpeed: Long // Time in nanos
 	get() = 125_000_000
 
+val flushWaitTime: Long
+	get() = 1_000_000_000
+
 val nanoTime: Long
 	get() = System.nanoTime()
 

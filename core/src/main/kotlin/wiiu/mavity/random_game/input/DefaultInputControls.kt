@@ -19,8 +19,9 @@ object DefaultInputControls : KtxInputAdapter, ControllerAdapter() {
 	}
 
 	override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean {
-		if (buttonIndex == controller.mapping.buttonStart) {
-			if (Client.paused) Client.resume() else Client.pause()
+		val mapping = controller.mapping
+		when (buttonIndex) {
+			mapping.buttonStart -> if (Client.paused) Client.resume() else Client.pause()
 		}
 		controller.startVibration(0.5.seconds, 0.2f)
 		return true

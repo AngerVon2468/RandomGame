@@ -8,50 +8,52 @@ import io.ktor.utils.io.*
 
 import kotlinx.coroutines.Dispatchers
 
-import kotlin.reflect.KClass
-
-import wiiu.mavity.random_game.util.asyncIO
+import wiiu.mavity.random_game.util.*
 
 import java.util.concurrent.atomic.AtomicBoolean
 
-val registeredNetworkables: MutableMap<KClass<*>, Networkable<*>> = mutableMapOf()
-
 @Suppress("PropertyName") // You can't tell me how to name my own properties!
 abstract class SidedConnectionManager<T : SidedConnection> : Disposable {
+
+	private var prevTime: Long = nanoTime
 
 	val selectorManager = SelectorManager(Dispatchers.IO)
 
 	protected val _connections: MutableList<T> = mutableListOf()
 	val connections: List<T> get() = this._connections
 
-	val awaitingConnection = AtomicBoolean()
+	val awaitingConnection = AtomicBoolean(true)
 
 	fun tcpSocket(): TcpSocketBuilder = aSocket(this.selectorManager).tcp()
 
 	open fun preLoop() {
 		launchConnection()
-		this.connections.forEach { it += "{" }
 	}
 
 	open fun postLoop() {
-		this.connections.forEach { it += "\b}\n" }
-		this.connections.forEach(SidedConnection::postLoop)
+		val nanoTime = nanoTime
+		if (nanoTime - prevTime > flushWaitTime) {
+			this.connections.forEach { it += "}\n" }
+			this.connections.forEach(SidedConnection::postLoop)
+			this.connections.forEach { it += "{" }
+			prevTime = nanoTime
+		}
 	}
 
 	abstract fun launchConnection()
 
-	@Suppress("UNCHECKED_CAST")
-	inline fun <reified T> getNetworkable(): Networkable<T> {
-		val clazz = T::class
-		val result = registeredNetworkables.filterKeys { it == clazz }[clazz] as Networkable<T>?
-		return result ?: throw IllegalStateException("Couldn't find Networkable for class: $clazz!")
+	fun setupResponseListeners() {
+		println("Connection made! Setting up response listeners!")
+		this.connections.forEach {
+			asyncIO {
+				while (true) {
+					it.connection.input.readUTF8LineTo(System.out)
+				}
+			}
+		}
 	}
 
-	inline operator fun <reified T> plusAssign(obj: T) {
-		val networkable = getNetworkable<T>()
-		val send = "(${networkable.deconstruct(obj)})+"
-		this.connections.forEach { it += send }
-	}
+	operator fun plusAssign(data: String) = this.connections.forEach { it += data }
 
 	override fun dispose() {
 		this._connections.forEach {
@@ -65,19 +67,14 @@ abstract class SidedConnectionManager<T : SidedConnection> : Disposable {
 abstract class SidedConnection(val connection: Connection) : Disposable {
 
 	open fun postLoop() {
-		asyncIO { connection.output.flush() }
+		asyncIO {
+			if (!connection.output.isClosedForWrite) connection.output.flush()
+		}
 	}
 
-	operator fun plusAssign(text: String) {
-		asyncIO { connection.output.writeStringUtf8(text) }
+	open operator fun plusAssign(data: String) {
+		asyncIO { connection.output.writeStringUtf8(data) }
 	}
 
 	override fun dispose() = this.connection.socket.dispose()
-}
-
-interface Networkable<T> {
-
-	fun deconstruct(obj: T): String
-
-	fun construct(packet: String): T
 }

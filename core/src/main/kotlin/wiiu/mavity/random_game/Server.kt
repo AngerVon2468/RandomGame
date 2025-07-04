@@ -10,7 +10,7 @@ import wiiu.mavity.random_game.util.*
 
 object Server : KtxApplicationAdapter {
 
-	lateinit var connectionManager: ServerConnectionManager
+	lateinit var connectionManager: ServerConnectionManager private set
 
 	override fun create() {
 //		embeddedServer(
@@ -21,13 +21,18 @@ object Server : KtxApplicationAdapter {
 //		).start(wait = true)
 		this.connectionManager = ServerConnectionManager()
 		println("STARTING!")
+		asyncIO {
+			while (true) {
+				val line = readlnOrNull()
+				if (line != null) connectionManager.connections.forEach { it += line }
+			}
+		}
 	}
 
 	override fun render() {
 		this.connectionManager.preLoop()
 		// Perform logic before looping, then flush the data to send & update
 		this.connectionManager.postLoop()
-		println("Hi")
 	}
 
 	override fun dispose() {
@@ -47,7 +52,11 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 		if (!this.awaitingConnection.get()) return
 		this.awaitingConnection.value = false
 		asyncIO {
+			println("Waiting for init.")
+			while (!this@ServerConnectionManager::serverSocket.isInitialized) ;
+			println("Init success!")
 			_connections += ServerConnection(serverSocket.accept().connection())
+			setupResponseListeners()
 			awaitingConnection.value = true
 		}
 	}
