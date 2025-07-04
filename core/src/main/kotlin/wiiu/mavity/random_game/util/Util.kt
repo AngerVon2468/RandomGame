@@ -75,17 +75,19 @@ fun squareRoot(number: Number): Float = sqrt(number.toFloat())
 
 fun Number.powerOf(number: Number): Float = this.toFloat().pow(number.toFloat())
 
+typealias CoroutineBlock = suspend CoroutineScope.() -> Unit
+
 fun async(
 	context: CoroutineContext = EmptyCoroutineContext,
 	start: CoroutineStart = CoroutineStart.DEFAULT,
 	dispatcher: CoroutineDispatcher = Dispatchers.Default,
-	block: suspend CoroutineScope.() -> Unit
+	block: CoroutineBlock
 ): Job = CoroutineScope(dispatcher).launch(context, start, block)
 
 fun asyncIO(
 	context: CoroutineContext = EmptyCoroutineContext,
 	start: CoroutineStart = CoroutineStart.DEFAULT,
-	block: suspend CoroutineScope.() -> Unit
+	block: CoroutineBlock
 ): Job = async(context, start, Dispatchers.IO, block)
 
 // ANSI Colour Codes

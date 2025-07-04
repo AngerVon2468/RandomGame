@@ -22,6 +22,7 @@ object Server : KtxApplicationAdapter {
 //			module = Application::module
 //		).start(wait = true)
 		this.connectionManager = ServerConnectionManager()
+		this.connectionManager.setupResponseListeners()
 		println("STARTING!")
 		asyncIO {
 			while (true) {
@@ -60,10 +61,10 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 		this.awaitingConnection.value = false
 		this.connectionJob = asyncIO {
 			println("Waiting for init.")
+			@Suppress("ControlFlowWithEmptyBody")
 			while (!this@ServerConnectionManager::serverSocket.isInitialized) ;
 			println("Init success!")
-			_connections += ServerConnection(serverSocket.accept().connection())
-			setupResponseListeners()
+			_connections += ServerConnection(serverSocket.accept().connection()).also { it += "{" }
 			awaitingConnection.value = true
 		}
 	}

@@ -7,8 +7,8 @@ import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 
 import kotlinx.coroutines.*
-
-import kotlin.system.exitProcess
+// Already have another import that also has the same name, have to specify to avoid import ambiguity.
+import kotlinx.coroutines.CancellationException
 
 import ktx.log.error
 
@@ -70,12 +70,13 @@ abstract class SidedConnectionManager<T : SidedConnection> : Disposable {
 							it.dispose()
 						}
 					} catch(e: Throwable) {
+						if (e is CancellationException) continue
 						error { "Exception caught during response listener loop! Abandoning! $e" }
 						break@outer
 					}
 				}
 			}
-			exitProcess(0)
+			throw Error("Response loop was broken! Serious exception likely caught!")
 		}
 	}
 

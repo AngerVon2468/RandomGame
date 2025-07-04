@@ -49,6 +49,7 @@ object Client : KtxApplicationAdapter {
 
 	override fun create() {
 		this.connectionManager = ClientConnectionManager()
+		this.connectionManager.setupResponseListeners()
 		this.fpsLogger = FPSLogger(75)
 		KtxAsync.initiate()
 		Gdx.app.applicationLogger = Logging
@@ -125,8 +126,7 @@ class ClientConnectionManager : SidedConnectionManager<ClientConnection>() {
 		if (!this.awaitingConnection.value) return
 		this.awaitingConnection.value = false
 		asyncIO {
-			_connections += ClientConnection(tcpSocket().connect(OptionsParser.ip, OptionsParser.port).connection())
-			setupResponseListeners()
+			_connections += ClientConnection(tcpSocket().connect(OptionsParser.ip, OptionsParser.port).connection()).also { it += "{" }
 		}
 	}
 
