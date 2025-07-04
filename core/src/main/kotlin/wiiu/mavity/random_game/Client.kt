@@ -122,7 +122,7 @@ class ClientConnectionManager : SidedConnectionManager<ClientConnection>() {
 
 	// We only need the one connection.
 	override fun launchConnection() {
-		if (!this.awaitingConnection.get()) return
+		if (!this.awaitingConnection.value) return
 		this.awaitingConnection.value = false
 		asyncIO {
 			_connections += ClientConnection(tcpSocket().connect(OptionsParser.ip, OptionsParser.port).connection())

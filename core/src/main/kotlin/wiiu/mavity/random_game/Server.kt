@@ -2,7 +2,6 @@ package wiiu.mavity.random_game
 
 import io.ktor.network.sockets.*
 import io.ktor.server.application.Application
-import io.ktor.server.engine.internal.ClosedChannelException
 import io.ktor.server.routing.*
 
 import ktx.app.KtxApplicationAdapter
@@ -25,7 +24,7 @@ object Server : KtxApplicationAdapter {
 		asyncIO {
 			while (true) {
 				val line = readlnOrNull()
-				if (line != null) connectionManager.connections.forEach { it += line }
+				if (line != null) this@Server.connectionManager += line
 			}
 		}
 	}
@@ -50,7 +49,7 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 	}
 
 	override fun launchConnection() {
-		if (!this.awaitingConnection.get()) return
+		if (!this.awaitingConnection.value) return
 		this.awaitingConnection.value = false
 		asyncIO {
 			println("Waiting for init.")
@@ -60,13 +59,6 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 			setupResponseListeners()
 			awaitingConnection.value = true
 		}
-	}
-
-	override fun dispose() {
-		super.dispose()
-		try {
-			this.serverSocket.dispose()
-		} catch (ignored: ClosedChannelException) {} // No idea how to stop this one.
 	}
 }
 
