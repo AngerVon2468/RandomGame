@@ -84,14 +84,12 @@ object Client : KtxApplicationAdapter {
 	private fun logic(deltaTime: Float) = Unit
 
 	private fun draw(deltaTime: Float) {
-		this.connectionManager.preLoop()
 		clearScreen(red = 0f, green = 0f, blue = 0f)
 		this.viewport(true)
 		this.batch.projectionMatrix = this.viewport.camera.combined
 		this.batch.begin()
 		this.screen.render(deltaTime)
 		this.batch.end()
-		this.connectionManager.postLoop()
 	}
 
 	override fun pause() {
@@ -128,12 +126,6 @@ class ClientConnectionManager : SidedConnectionManager<ClientConnection>() {
 		asyncIO {
 			_connections += ClientConnection(tcpSocket().connect(OptionsParser.ip, OptionsParser.port).connection()).also { it += "{" }
 		}
-	}
-
-	override fun dispose() = runBlocking {
-		theConnection += "(END)}"
-		theConnection.postLoop0()
-		super.dispose()
 	}
 }
 

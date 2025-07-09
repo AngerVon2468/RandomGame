@@ -6,16 +6,38 @@ import com.badlogic.gdx.*
 import com.badlogic.gdx.controllers.*
 
 import ktx.app.KtxInputAdapter
+import ktx.log.error
 
 import wiiu.mavity.random_game.Client
 
 import kotlin.time.Duration.Companion.seconds
 
+// Scan for ←→↓←→↓
 object DefaultInputControls : KtxInputAdapter, ControllerAdapter() {
 
 	init {
 		Gdx.input.inputProcessor = DefaultInputControls
 		Controllers.addListener(this)
+	}
+
+	private var _theController: Controller? = null
+	val controllerConnected: Boolean get() = this._theController != null
+	val theController: Controller get() = this._theController!!
+
+	override fun connected(controller: Controller) {
+		if (this.controllerConnected) {
+			error { "New controller paired when main already present! Multiplayer not implemented yet!" }
+			return
+		}
+		this._theController = controller
+	}
+
+	override fun disconnected(controller: Controller) {
+		if (!this.controllerConnected) {
+			error { "Excuse me, WHAT!?" }
+			throw IllegalStateException("Received disconnect event when no controller was bound.")
+		}
+		if (this.theController.uniqueId == controller.uniqueId) this._theController = null
 	}
 
 	override fun buttonDown(controller: Controller, buttonIndex: Int): Boolean {
