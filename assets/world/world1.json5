@@ -1,8 +1,6 @@
 {
 	"1:1": {
-		"1:1": "builtin:dirt"
+		"1:1": "builtin:dirt!wiiu.mavity.random_game.impls.world.entity.TestCharacterEntity"
 	},
-	"1:2": {
-
-	}
+	"1:2": {}
 }

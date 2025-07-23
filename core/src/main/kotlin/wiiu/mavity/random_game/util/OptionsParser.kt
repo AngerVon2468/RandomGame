@@ -32,12 +32,10 @@ object OptionsParser {
 		}
 	}
 
-	inline operator fun <reified T> get(key: String): T {
-		return when (key) {
-			"d", "dist", "distribution" -> this.distribution
-			"p", "port" -> this.port
-			"i", "ip" -> this.ip
-			else -> this.mArgs[key]
-		} as T
-	}
+	inline operator fun <reified T> get(key: String): T = when (key) {
+		"d", "dist", "distribution" -> this.distribution
+		"p", "port" -> this.port
+		"i", "ip" -> this.ip
+		else -> this.mArgs[key]
+	} as T
 }

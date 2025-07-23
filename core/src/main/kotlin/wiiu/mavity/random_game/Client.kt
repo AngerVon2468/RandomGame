@@ -17,8 +17,6 @@ import wiiu.mavity.random_game.ui.screen.StartupScreen
 import wiiu.mavity.random_game.input.DefaultInputControls
 import wiiu.mavity.random_game.util.*
 
-import kotlinx.coroutines.runBlocking
-
 import kotlin.collections.plusAssign
 
 // TODO: Note to self: The priority order of rendering makes whatever is drawn last show up the highest.
