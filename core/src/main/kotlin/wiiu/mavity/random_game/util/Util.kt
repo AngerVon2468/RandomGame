@@ -108,3 +108,42 @@ val THE_FORMATTER: DateTimeFormatter = DateTimeFormatterBuilder()
 var AtomicBoolean.value: Boolean
 	get() = this.get()
 	set(value) = this.set(value)
+
+open class Two<out A, out B>(open val first: A, open val second: B) {
+
+	constructor(pair: Pair<A, B>) : this(pair.first, pair.second)
+
+	override fun toString(): String = "$first:$second"
+
+	override fun equals(other: Any?): Boolean {
+		if (other === this) return true
+		if (other !is Two<*, *>) return false
+		if (other.first != this.first) return false
+		if (other.second != this.second) return false
+		if (other.hashCode() != this.hashCode()) return false
+		return true
+	}
+
+	override fun hashCode(): Int {
+		var result = this.first?.hashCode() ?: 0
+		result = 31 * result + (this.second?.hashCode() ?: 0)
+		return result
+	}
+
+	companion object {
+
+		inline fun <reified A, reified B> fromString0(
+			str: String,
+			convert1: (String) -> A,
+			convert2: (String) -> B
+		): Two<A, B> {
+			val rawSplit = str.split(":")
+			return Two(convert1(rawSplit[0]), convert2(rawSplit[1]))
+		}
+
+		inline fun <reified T> fromString0(
+			str: String,
+			convert: (String) -> T
+		): Two<T, T> = fromString0(str, convert, convert)
+	}
+}
