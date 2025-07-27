@@ -122,7 +122,7 @@ class ClientConnectionManager : SidedConnectionManager<ClientConnection>() {
 		if (!this.awaitingConnection.value) return
 		this.awaitingConnection.value = false
 		asyncIO {
-			_connections += ClientConnection(tcpSocket().connect(OptionsParser.ip, OptionsParser.port).connection()).also { it += "{" }
+			_connections += ClientConnection(tcpSocket().connect(Options.ip, Options.port).connection()).also { it += "{" }
 		}
 	}
 }

@@ -53,7 +53,7 @@ class ServerConnectionManager : SidedConnectionManager<ServerConnection>() {
 	private var connectionJob: Job? = null
 
 	init {
-		asyncIO { serverSocket = tcpSocket().bind(OptionsParser.ip, OptionsParser.port) }
+		asyncIO { serverSocket = tcpSocket().bind(Options.ip, Options.port) }
 	}
 
 	override fun launchConnection() {
