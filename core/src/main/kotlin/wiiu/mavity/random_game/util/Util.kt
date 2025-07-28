@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.*
 import com.badlogic.gdx.physics.box2d.World
+import com.google.gson.GsonBuilder
 
 import org.jetbrains.annotations.Range
 
@@ -110,6 +111,10 @@ var AtomicBoolean.value: Boolean
 	set(value) = this.set(value)
 
 open class Two<out A, out B>(open val first: A, open val second: B) {
+
+	open operator fun component1(): A = this.first
+
+	open operator fun component2(): B = this.second
 
 	constructor(pair: Pair<A, B>) : this(pair.first, pair.second)
 

@@ -15,22 +15,26 @@ class LevelTests {
 			.registerTypeAdapter(Level::class.java, LevelTypeAdapter)
 			.registerTypeAdapter(Chunk::class.java, ChunkTypeAdapter)
 			.create()
-		try {
-			val ret = gson.fromJson("""
-				{
-					"1:1": {
-						"1:1": "builtin:dirt!wiiu.mavity.random_game.impls.world.entity.TestCharacterEntity",
-						"1:5": "builtin:stone"
-					},
-					"1:2": {},
-					"1:9": {}
-				}
-			""".trimIndent(), Level::class.java)
-		} catch (e: Exception) {
-			val error = AssertionError("Failed to read Level from JSON!")
-			error.addSuppressed(e)
-			throw error
+
+		val json = """
+		{
+		  "1:1": {
+		    "1:1": "builtin:dirt!wiiu.mavity.random_game.impls.world.entity.TestCharacterEntity",
+		    "7:5": "builtin:stone"
+		  },
+		  "1:2": {},
+		  "1:9": {
+		    "3:8": "custom:custom"
+		  }
 		}
-		// TODO: Add deserialisation tests
+		""".trimIndent()
+
+		val `in` = try { gson.fromJson(json, Level::class.java) }
+		catch (e: Exception) { fail("Failed to read Level from JSON!", e) }
+
+		val `out` = try { gson.toJson(`in`) }
+		catch (e: Exception) { fail("Failed to write Level to JSON!", e) }
+
+		assertEquals(json, `out`)
 	}
 }
