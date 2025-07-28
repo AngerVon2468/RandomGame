@@ -99,10 +99,8 @@ object ChunkTypeAdapter : TypeAdapter<Chunk>() {
 	}
 }
 
-fun read() {
-	val gson = GsonBuilder()
-		.setPrettyPrinting()
-		.registerTypeAdapter(Level::class.java, LevelTypeAdapter)
-		.registerTypeAdapter(Chunk::class.java, ChunkTypeAdapter)
-		.create()
-}
+val LEVEL_GSON: Gson = GsonBuilder()
+	.setPrettyPrinting()
+	.registerTypeAdapter(Level::class.java, LevelTypeAdapter)
+	.registerTypeAdapter(Chunk::class.java, ChunkTypeAdapter)
+	.create()

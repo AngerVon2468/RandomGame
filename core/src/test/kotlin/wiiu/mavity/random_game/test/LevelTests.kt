@@ -1,7 +1,5 @@
 package wiiu.mavity.random_game.test
 
-import com.google.gson.GsonBuilder
-
 import wiiu.mavity.random_game.level.*
 
 import kotlin.test.*
@@ -10,12 +8,6 @@ class LevelTests {
 
 	@Test
 	fun levelTypeAdapterTest() {
-		val gson = GsonBuilder()
-			.setPrettyPrinting()
-			.registerTypeAdapter(Level::class.java, LevelTypeAdapter)
-			.registerTypeAdapter(Chunk::class.java, ChunkTypeAdapter)
-			.create()
-
 		val json = """
 		{
 		  "1:1": {
@@ -29,10 +21,10 @@ class LevelTests {
 		}
 		""".trimIndent()
 
-		val `in` = try { gson.fromJson(json, Level::class.java) }
+		val `in` = try { LEVEL_GSON.fromJson(json, Level::class.java) }
 		catch (e: Exception) { fail("Failed to read Level from JSON!", e) }
 
-		val `out` = try { gson.toJson(`in`) }
+		val `out` = try { LEVEL_GSON.toJson(`in`) }
 		catch (e: Exception) { fail("Failed to write Level to JSON!", e) }
 
 		assertEquals(json, `out`)
