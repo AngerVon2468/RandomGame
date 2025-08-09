@@ -2,7 +2,7 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-            <layout class="wiiu.mavity.random_game.util.Layout"/>
+            <layout class="io.github.epicvon2468.random_game.util.Layout"/>
         </encoder>
     </appender>
     <root level="INFO">
