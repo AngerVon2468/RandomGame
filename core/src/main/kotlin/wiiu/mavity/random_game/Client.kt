@@ -48,7 +48,7 @@ object Client : KtxApplicationAdapter {
 	override fun create() {
 		this.connectionManager = ClientConnectionManager()
 		this.connectionManager.setupResponseListeners()
-		this.fpsLogger = FPSLogger(75)
+		this.fpsLogger = FPSLogger()
 		KtxAsync.initiate()
 		Gdx.app.applicationLogger = Logging
 		@Suppress("UnusedExpression") // Calls the `init` statement.

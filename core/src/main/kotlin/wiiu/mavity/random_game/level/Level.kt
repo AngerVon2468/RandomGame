@@ -20,10 +20,12 @@ val TileID.declarer: String get() = this.first
 val TileID.ID: String get() = this.first
 fun Two.Companion.fromStringTID(str: String): TileID = fromString0(str) { it }
 
+typealias EntityClass = Class<out Entity>
+
 data class TileInfo(
 	val ID: TileID,
-	val entityClass: Class<out Entity>?
-) : Two<TileID, Class<out Entity>?>(ID, entityClass) {
+	val entityClass: EntityClass?
+) : Two<TileID, EntityClass?>(ID, entityClass) {
 
 	override fun toString(): String = "$ID${if (entityClass != null) "!${entityClass.name}" else ""}"
 
@@ -34,8 +36,8 @@ data class TileInfo(
 			val index: Int = str.indexOf('!')
 			val str0 = if (index == -1) str else str.subSequence(0, index).toString()
 			val ID = TileID.fromStringTID(str0)
-			val entityClass: Class<out Entity>?
-			= if (index != -1) Class.forName(str.subSequence(index + 1, str.length).toString()) as Class<out Entity>?
+			val entityClass: EntityClass?
+			= if (index != -1) Class.forName(str.subSequence(index + 1, str.length).toString()) as EntityClass?
 			else null
 			return TileInfo(ID, entityClass)
 		}
